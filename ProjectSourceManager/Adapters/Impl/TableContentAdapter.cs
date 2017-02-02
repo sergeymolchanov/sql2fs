@@ -5,22 +5,8 @@ using System.Text;
 
 namespace ProjectSourceManager.Adapters.Impl
 {
-    public class TableContentAdapter : AdapterBase
+    public class TableContentAdapter : AdapterBaseSQL
     {
-        private SqlConnection _connection = null;
-        private SqlConnection Connection
-        {
-            get
-            {
-                if (_connection == null)
-                {
-                    _connection = new SqlConnection(Project.Settings.ConnectionString);
-                    _connection.Open();
-                }
-                return _connection;
-            }
-        }
-
         public TableContentAdapter(ProjectDirectory project) : base(project)
         {
         }

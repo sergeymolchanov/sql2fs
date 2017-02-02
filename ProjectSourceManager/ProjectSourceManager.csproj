@@ -50,6 +50,7 @@
     <Compile Include="Adapters\AdaptedItem.cs" />
     <Compile Include="Adapters\AdapterBase.cs" />
     <Compile Include="Adapters\AdapterManager.cs" />
+    <Compile Include="Adapters\Impl\AdapterBaseSQL.cs" />
     <Compile Include="Adapters\Impl\DBContent\SQLErrorView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +71,8 @@
     <Compile Include="Adapters\Impl\TableContentItem.cs" />
     <Compile Include="Adapters\Impl\VorlagenAdapter.cs" />
     <Compile Include="Adapters\Impl\VorlagenItem.cs" />
+    <Compile Include="Adapters\Impl\DDLAdapter.cs" />
+    <Compile Include="Adapters\Impl\DDLItem.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Adapters\Impl\DBContent\TableData.cs" />
     <Compile Include="Adapters\Impl\DBContent\TableRow.cs" />

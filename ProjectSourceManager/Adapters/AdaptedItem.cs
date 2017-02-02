@@ -22,6 +22,7 @@ namespace ProjectSourceManager.Adapters
         public bool IsExistsLocal { get; set; }
         public bool IsExistsRemote { get; set; }
 
+
         public abstract void Push(byte[] data);
         public abstract byte[] Pull();
 

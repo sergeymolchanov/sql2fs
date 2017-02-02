@@ -3,26 +3,12 @@ using System.Data.SqlClient;
 
 namespace ProjectSourceManager.Adapters.Impl
 {
-    public class StoredProcAdapter : AdapterBase
+    public class StoredProcAdapter : AdapterBaseSQL
     {
         private const String QueryString = @"SELECT type, name 
   FROM SYS.objects 
  where type in ('FN', 'IF', 'P', 'TF', 'TR', 'V')
  order by type, name";
-
-        private SqlConnection _connection;
-        private SqlConnection Connection
-        {
-            get
-            {
-                if (_connection == null)
-                {
-                    _connection = new SqlConnection(Project.Settings.ConnectionString);
-                    _connection.Open();
-                }
-                return _connection;
-            }
-        }
 
         public StoredProcAdapter(ProjectDirectory project) : base(project)
         {

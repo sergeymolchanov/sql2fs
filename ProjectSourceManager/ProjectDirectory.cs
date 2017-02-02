@@ -24,11 +24,11 @@ namespace ProjectSourceManager
             Settings = ProjectSettings.Load(dir);
         }
 
-        public void Dump()
+        public void Dump(bool force)
         {
             String actualCommitId = GetActualCommitId();
             byte[] validCommitBytes = this.LoadFile("", VALID_COMMIT_FILE);
-            if (actualCommitId != "" && validCommitBytes != null)
+            if (!force && actualCommitId != "" && validCommitBytes != null)
             {
                 String validCommitId = Encoding.ASCII.GetString(validCommitBytes);
 
@@ -39,18 +39,18 @@ namespace ProjectSourceManager
             }
 
             AdapterManager manager = new AdapterManager(this);
-            manager.Dump();
+            manager.Dump(force);
 
             IsRepoLocked = false;
         }
 
-        public void Restore()
+        public void Restore(bool force)
         {
             String actualCommitId = GetActualCommitId();
             this.StoreFile("", VALID_COMMIT_FILE, Encoding.ASCII.GetBytes(actualCommitId));
 
             AdapterManager manager = new AdapterManager(this);
-            manager.Restore();
+            manager.Restore(force);
 
             IsRepoLocked = true;
         }
@@ -115,26 +115,33 @@ namespace ProjectSourceManager
 
         public void StoreFile(String prefix, String name, byte[] data)
         {
-            String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
-
-            String subPath = "";
-            String[] pathElements = _file.Replace("/", "\\").Split('\\');
-            for (int i=0; i<pathElements.Length-1;i++)
+            if (data == null)
             {
-                String subdir = pathElements[i];
-
-                if (subdir.Length == 0)
-                    continue;
-
-                if (subPath == "")
-                    subPath = subdir;
-                else
-                    subPath += "\\" + subdir;
-                if (!Directory.Exists(subPath))
-                    Directory.CreateDirectory(subPath);
+                File.Delete(String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name));
             }
+            else
+            {
+                String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
 
-            File.WriteAllBytes(_file, data);
+                String subPath = "";
+                String[] pathElements = _file.Replace("/", "\\").Split('\\');
+                for (int i = 0; i < pathElements.Length - 1; i++)
+                {
+                    String subdir = pathElements[i];
+
+                    if (subdir.Length == 0)
+                        continue;
+
+                    if (subPath == "")
+                        subPath = subdir;
+                    else
+                        subPath += "\\" + subdir;
+                    if (!Directory.Exists(subPath))
+                        Directory.CreateDirectory(subPath);
+                }
+
+                File.WriteAllBytes(_file, data);
+            }
         }
 
         public byte[] LoadFile(String prefix, String name)
@@ -149,7 +156,7 @@ namespace ProjectSourceManager
 
         public void DeleteFile(String prefix, String name)
         {
-            File.Delete(String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name));
+            StoreFile(prefix, name, null);
         }
 
         private void SetWhoAmI()

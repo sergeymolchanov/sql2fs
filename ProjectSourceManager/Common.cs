@@ -19,6 +19,9 @@ namespace ProjectSourceManager
 
         public static byte[] CalculateMD5Hash(byte[] inputBytes)
         {
+            if (inputBytes == null)
+                return null;
+
             byte[] hash = md5.ComputeHash(inputBytes);
 
             StringBuilder sb = new StringBuilder();
@@ -41,6 +44,9 @@ namespace ProjectSourceManager
 
         public static String ConvertFrom(byte[] data, Encoding encoding)
         {
+            if (data == null)
+                return null;
+
             byte[] convBytes = Encoding.Convert(DefaultEncoding, encoding, data);
 
             return encoding.GetString(convBytes);

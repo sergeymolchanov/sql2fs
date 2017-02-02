@@ -18,10 +18,12 @@ namespace ProjectSourceManager.Adapters.Impl.DBContent
         }
 
         private bool doCancel = false;
-        public static bool ShowSQL(String q)
+        public static bool ShowSQL(ProjectSourceManager.Adapters.Impl.AdapterBaseSQL.AdapterSqlException q)
         {
             SQLErrorView f = new SQLErrorView();
-            f.textBox1.Text = q;
+            f.textBox1.Text = q.Sql;
+            f.textBox2.Text = q.Message;
+            f.textBox3.Text = q.InnerException.StackTrace;
 
             f.ShowDialog();
             return f.doCancel;

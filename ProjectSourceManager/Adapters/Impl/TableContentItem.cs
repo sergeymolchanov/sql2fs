@@ -36,7 +36,6 @@ namespace ProjectSourceManager.Adapters.Impl
             this.connection = connection;
         }
 
-        public List<String> ErrorSQL { get; private set; }
         public override void Push(byte[] data)
         {
             TableData fileData = DeserializeTable(Common.ConvertFrom(data, _enc));
@@ -150,7 +149,6 @@ namespace ProjectSourceManager.Adapters.Impl
                 }
             }
 
-            ErrorSQL = new List<string>();
             foreach (var q in sql)
             {
                 try
@@ -159,30 +157,9 @@ namespace ProjectSourceManager.Adapters.Impl
                 }
                 catch (Exception e)
                 {
-                    ErrorSQL.Add(q);
+                    ((AdapterBaseSQL)this.Adapter).AddError(q, e);
                 }
             }
-        }
-
-        public override List<String> ProcessError()
-        {
-            if (ErrorSQL == null) return new List<string>();
-            List<String> sql = ErrorSQL;
-            ErrorSQL = new List<string>();
-
-            foreach (var q in sql)
-            {
-                try
-                {
-                    new SqlCommand(q, connection).ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    ErrorSQL.Add(q);
-                }
-            }
-
-            return ErrorSQL;
         }
 
         public TableData PullTable()

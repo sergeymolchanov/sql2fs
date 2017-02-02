@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using ProjectSourceManager.Adapters.Impl.DBContent;
+using System.Data.SqlClient;
 
 namespace ProjectSourceManager.Adapters
 {
@@ -11,7 +12,7 @@ namespace ProjectSourceManager.Adapters
         public ProjectDirectory Project { get; private set; }
         public List<AdaptedItem> Items { get; private set; }
 
-        public String DataPath { get { return Project.Dir.FullName + @"\" + Prefix;  } }
+        public String DataPath { get { return Project.Dir.FullName + @"\" + Prefix; } }
 
         protected AdapterBase(ProjectDirectory project)
         {
@@ -65,7 +66,7 @@ namespace ProjectSourceManager.Adapters
                 Directory.CreateDirectory(path);
         }
 
-        public void Dump()
+        public void Dump(bool force)
         {
             checkTargetDir();
 
@@ -81,9 +82,10 @@ namespace ProjectSourceManager.Adapters
             }
         }
 
-        public void Restore()
+        public void Restore(bool force)
         {
             checkTargetDir();
+            clearErrors();
 
             ProgressBarForm.Instance.Timer1Pos = 0;
             ProgressBarForm.Instance.Timer1Max = Items.Count;
@@ -98,34 +100,7 @@ namespace ProjectSourceManager.Adapters
                 Application.DoEvents();
             }
 
-            int ErrorCount = -1;
-            int PrevErrorCount = -2;
-            String oneError = null;
-
-            while (true)
-            {
-                ErrorCount = 0;
-                foreach (var item in Items)
-                {
-                    List<String> errors = item.ProcessError();
-                    ErrorCount += errors.Count;
-
-                    if (errors.Count > 0)
-                        oneError = errors[0];
-                }
-
-                if (ErrorCount == 0)
-                    break;
-
-                if (ErrorCount == PrevErrorCount)
-                {
-                    bool doCancel = SQLErrorView.ShowSQL(oneError);
-
-                    if (doCancel)
-                        throw new Exception("Есть неисправимые ошибки. Невозможно обновить данные.");
-                }
-                PrevErrorCount = ErrorCount;
-            }
+            processErrors();
         }
 
         public void Check()
@@ -143,6 +118,14 @@ namespace ProjectSourceManager.Adapters
                 item.Restore(true);
                 Application.DoEvents();
             }
+        }
+
+        protected virtual void processErrors()
+        {
+        }
+
+        protected virtual void clearErrors()
+        {
         }
     }
 }

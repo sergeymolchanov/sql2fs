@@ -22,6 +22,7 @@ namespace ProjectSourceManager.Adapters
             if (Project.Settings.ReportServerURL.Length > 5)
                 Adapters.Add(new ReportAdapter(project));
 
+            Adapters.Add(new DDLAdapter(project));
             Adapters.Add(new TableContentAdapter(project));
             Adapters.Add(new VorlagenAdapter(project));
             Adapters.Add(new StoredProcAdapter(project));
@@ -39,7 +40,7 @@ namespace ProjectSourceManager.Adapters
             }
         }
 
-        public void Dump()
+        public void Dump(bool force)
         {
             ProgressBarForm.Instance.Timer2Pos = 0;
             ProgressBarForm.Instance.Timer2Max = Adapters.Count;
@@ -47,12 +48,12 @@ namespace ProjectSourceManager.Adapters
             foreach (var item in Adapters)
             {
                 ProgressBarForm.Instance.Timer2Text = "Загрузка " + item.Prefix;
-                item.Dump();
+                item.Dump(force);
                 ProgressBarForm.Instance.Timer2Pos++;
             }
         }
 
-        public void Restore()
+        public void Restore(bool force)
         {
             ProgressBarForm.Instance.Timer2Pos = 0;
             ProgressBarForm.Instance.Timer2Max = Adapters.Count * 2;
@@ -60,14 +61,17 @@ namespace ProjectSourceManager.Adapters
             foreach (var item in Adapters)
             {
                 ProgressBarForm.Instance.Timer2Text = "Проверка " + item.Prefix;
-                item.Check();
+                if (!force)
+                {
+                    item.Check();
+                }
                 ProgressBarForm.Instance.Timer2Pos++;
             }
 
             foreach (var item in Adapters)
             {
                 ProgressBarForm.Instance.Timer2Text = "Обновление " + item.Prefix;
-                item.Restore();
+                item.Restore(force);
                 ProgressBarForm.Instance.Timer2Pos++;
             }
         }

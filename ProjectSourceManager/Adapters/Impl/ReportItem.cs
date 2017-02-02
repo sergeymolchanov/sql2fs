@@ -19,16 +19,15 @@ namespace ProjectSourceManager.Adapters.Impl
 
         public override void Push(byte[] data)
         {
-
+            Service.SetItemDefinition("/" + Name, data, new Property[] {});
         }
 
         public override byte[] Pull()
         {
-            byte[] reportDefinition = null;
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-
-            reportDefinition = Service.GetItemDefinition("/" + Name);
+            byte[] reportDefinition = Service.GetItemDefinition("/" + Name);
             /*
+            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            reportDefinition = Service.GetItemDefinition("/" + Name);
             MemoryStream stream = new MemoryStream(reportDefinition, 0, reportDefinition.Length);
 
             string myDocumentsFolder =

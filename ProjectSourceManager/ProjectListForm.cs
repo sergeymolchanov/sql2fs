@@ -127,11 +127,11 @@ namespace ProjectSourceManager
                 {
                     if (_threadIsDump)
                     {
-                        _project.Dump();
+                        _project.Dump(cbForce.Checked);
                     }
                     else
                     {
-                        _project.Restore();
+                        _project.Restore(cbForce.Checked);
                     }
                 }
                 catch (Exception exception)
@@ -145,11 +145,11 @@ namespace ProjectSourceManager
             {
                 if (_threadIsDump)
                 {
-                    _project.Dump();
+                    _project.Dump(cbForce.Checked);
                 }
                 else
                 {
-                    _project.Restore();
+                    _project.Restore(cbForce.Checked);
                 }
             }
 
