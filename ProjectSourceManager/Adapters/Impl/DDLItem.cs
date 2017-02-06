@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectSourceManager.Adapters.Impl
 {
-    public class DDLItem : AdaptedItem
+    public class DDLItem : AdaptedItem, IComparable<DDLItem>
     {
         private const String QueryString = "select CommandText from _DDL_Log where RowPointer = '{0}'";
 
@@ -30,48 +30,17 @@ namespace ProjectSourceManager.Adapters.Impl
 
         public override void Push(byte[] data)
         {
-            /*
+            if (this.IsExistsRemote)
+                return;
+
             String dataStr = Common.ConvertFrom(data, _enc);
 
-            if (dataStr == null)
-            {
-                String sql = String.Format("DROP {0} {1}", ObjectTypeFull, ObjectName);
-                try
-                {
-                    SqlCommand cmd = new SqlCommand(sql, Connection);
-                    cmd.ExecuteNonQuery();
-                }
-                catch(Exception ex)
-                {
-                    ((AdapterBaseSQL)this.Adapter).AddError(sql, ex);
-                }
-                return;
-            }
-
-            int idx = firstWordIndex(dataStr);
-
-            if (idx < 0)
-                throw new Exception("Для объекта БД " + ObjectName + " невозможно заменить CREATE на ALTER");
-
-            String sqlText = dataStr.Substring(0, idx) + "ALTER" + dataStr.Substring(idx + 6);
-
-            try
-            {
-                SqlCommand cmd = new SqlCommand(sqlText, Connection);
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    SqlCommand cmd = new SqlCommand(dataStr, Connection);
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    ((AdapterBaseSQL)this.Adapter).AddError(sqlText, e);
-                }
-            }*/
+            SqlCommand cmd = new SqlCommand("_Push_SQL", Connection);
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ptr", ActionPtr);
+            cmd.Parameters.AddWithValue("@originalTime", ActionDateTime);
+            cmd.Parameters.AddWithValue("@sql", dataStr);
+            cmd.ExecuteNonQuery();
         }
 
         public override byte[] Pull()
@@ -85,6 +54,11 @@ namespace ProjectSourceManager.Adapters.Impl
             String dataStr = (string) data;
 
             return Common.ConvertTo(dataStr, _enc);
+        }
+
+        public int CompareTo(DDLItem item)
+        {
+            return this.ActionDateTime.CompareTo(item.ActionDateTime);
         }
     }
 }

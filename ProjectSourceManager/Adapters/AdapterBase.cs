@@ -91,6 +91,8 @@ namespace ProjectSourceManager.Adapters
             ProgressBarForm.Instance.Timer1Max = Items.Count;
             Application.DoEvents();
 
+            DoSort();
+
             foreach (var item in Items)
             {
                 ProgressBarForm.Instance.Timer1Pos++;
@@ -125,6 +127,10 @@ namespace ProjectSourceManager.Adapters
         }
 
         protected virtual void clearErrors()
+        {
+        }
+
+        protected virtual void DoSort()
         {
         }
     }

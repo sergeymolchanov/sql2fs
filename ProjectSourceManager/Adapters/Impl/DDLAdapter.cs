@@ -31,6 +31,11 @@ namespace ProjectSourceManager.Adapters.Impl
             }
         }
 
+        protected override void DoSort()
+        {
+            Items.Sort();
+        }
+
         public override String Prefix { get { return "DatabaseDDL"; } }
         public override String Postfix { get { return ".sql"; } }
 
