@@ -159,6 +159,22 @@ namespace ProjectSourceManager
             StoreFile(prefix, name, null);
         }
 
+        public DateTime? GetLocalModifyTime(String prefix, String name)
+        {
+            String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
+            if (!File.Exists(_file))
+                return null;
+            return File.GetLastWriteTime(_file);
+        }
+
+        public void SetLocalModifyTime(String prefix, String name, DateTime date)
+        {
+            String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
+            if (!File.Exists(_file))
+                return;
+            File.SetLastWriteTime(_file, date);
+        }
+
         private void SetWhoAmI()
         {
             String _username = Common.GlobalSettings.Instance.UserName;

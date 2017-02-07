@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjectSourceManager.Adapters.Impl
 {
-    public class DDLItem : AdaptedItem, IComparable<DDLItem>
+    public class DDLItem : AdaptedItem, IComparable
     {
         private const String QueryString = "select CommandText from _DDL_Log where RowPointer = '{0}'";
 
@@ -56,9 +56,9 @@ namespace ProjectSourceManager.Adapters.Impl
             return Common.ConvertTo(dataStr, _enc);
         }
 
-        public int CompareTo(DDLItem item)
+        public int CompareTo(Object item)
         {
-            return this.ActionDateTime.CompareTo(item.ActionDateTime);
+            return this.ActionDateTime.CompareTo(((DDLItem)item).ActionDateTime);
         }
     }
 }

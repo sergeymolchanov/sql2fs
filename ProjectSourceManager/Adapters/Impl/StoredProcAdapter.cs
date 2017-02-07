@@ -5,7 +5,7 @@ namespace ProjectSourceManager.Adapters.Impl
 {
     public class StoredProcAdapter : AdapterBaseSQL
     {
-        private const String QueryString = @"SELECT type, name 
+        private const String QueryString = @"SELECT type, name, modify_date
   FROM SYS.objects 
  where type in ('FN', 'IF', 'P', 'TF', 'TR', 'V')
  order by type, name";
@@ -26,7 +26,10 @@ namespace ProjectSourceManager.Adapters.Impl
             {
                 while (dr.Read())
                 {
-                    AddItem(dr.GetString(0).Trim() + "." + dr.GetString(1));
+                    String name = dr.GetString(0).Trim() + "." + dr.GetString(1);
+                    StoredProcItem i = new StoredProcItem(this, name, Project, Connection);
+                    i.RemoteModifyDate = dr.GetDateTime(2);
+                    Items.Add(i);                    
                 }
             }
         }

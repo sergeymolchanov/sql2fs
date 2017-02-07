@@ -22,11 +22,13 @@ namespace ProjectSourceManager.Adapters.Impl
             foreach (var item in rs.ListChildren("/" + Project.Settings.ReportRoot, true))
             {
                 if (item.TypeName == "Report")
-                {
+                {                    
                     String name = item.Path;
                     if (name.StartsWith("/"))
                         name = name.Substring(1);
-                    AddItem(name);
+                    ReportItem i = new ReportItem(this, name, Project, rs);
+                    i.RemoteModifyDate = item.ModifiedDate;
+                    Items.Add(i);
                 }
             }
         }

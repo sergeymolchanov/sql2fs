@@ -11,6 +11,7 @@ namespace ProjectSourceManager.Adapters.Impl
     {
         private String _aliasedFile;
 
+
         public VorlagenItem(AdapterBase adapter, String name, ProjectDirectory project)
             : base(adapter, name, project)
         {

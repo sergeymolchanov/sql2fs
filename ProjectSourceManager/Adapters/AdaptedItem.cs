@@ -11,6 +11,7 @@ namespace ProjectSourceManager.Adapters
 
         protected AdaptedItem(AdapterBase adapter, String name, ProjectDirectory project) : base()
         {
+            RemoteModifyDate = null;
             Adapter = adapter;
             Name = name;
             Project = project;
@@ -33,6 +34,14 @@ namespace ProjectSourceManager.Adapters
 
         public void Dump()
         {
+            DateTime? remoteModifyDate = RemoteModifyDate;
+            if (remoteModifyDate != null)
+            {
+                DateTime? localModifyDate = Project.GetLocalModifyTime(Adapter.Prefix, Name + Adapter.Postfix);
+                if (localModifyDate != null && localModifyDate.Value.Equals(remoteModifyDate.Value))
+                    return;
+            }
+
             byte[] data = Pull();
 
             if (data != null && data.Length > 0)
@@ -41,6 +50,9 @@ namespace ProjectSourceManager.Adapters
 
                 Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix, data);
                 Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5", hash);
+
+                if (remoteModifyDate != null)
+                    Project.SetLocalModifyTime(Adapter.Prefix, Name + Adapter.Postfix, remoteModifyDate.Value);
             }
             else
             {
@@ -51,6 +63,14 @@ namespace ProjectSourceManager.Adapters
 
         public void Restore(bool isCheckOnly)
         {
+            DateTime? remoteModifyDate = RemoteModifyDate;
+            if (remoteModifyDate != null)
+            {
+                DateTime? localModifyDate = Project.GetLocalModifyTime(Adapter.Prefix, Name + Adapter.Postfix);
+                if (localModifyDate != null && localModifyDate.Value.Equals(remoteModifyDate.Value))
+                    return;
+            }
+
             byte[] objData = Pull();
             byte[] objHash = Common.CalculateMD5Hash(objData);
             byte[] loadedObjHash = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5");
@@ -85,5 +105,7 @@ namespace ProjectSourceManager.Adapters
 
             return true;
         }
+
+        public DateTime? RemoteModifyDate { get; set; }
     }
 }

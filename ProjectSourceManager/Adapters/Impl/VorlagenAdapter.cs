@@ -32,7 +32,9 @@ namespace ProjectSourceManager.Adapters.Impl
 
             foreach (FileInfo file in dir.GetFiles())
             {
-                AddItem(file.Name);
+                VorlagenItem i = new VorlagenItem(this, file.Name, Project);
+                i.RemoteModifyDate = file.LastWriteTime;
+                Items.Add(i);
             }
         }
     }
