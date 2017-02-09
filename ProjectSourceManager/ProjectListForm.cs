@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using ProjectSourceManager.Adapters;
 using ProjectSourceManager.Exceptions;
+using System.IO;
 
 namespace ProjectSourceManager
 {
@@ -300,6 +301,27 @@ namespace ProjectSourceManager
             if (dir == null) return;
 
             dir.Switch();
+        }
+
+        private void ProjectListForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+        }
+
+        private void ProjectListForm_KeyDown(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+        }
+
+        private void tbName_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Alt && e.KeyCode == Keys.S)
+            {
+                new SendForm().Show();
+            }
         }
     }
 }

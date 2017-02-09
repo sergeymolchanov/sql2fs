@@ -184,6 +184,7 @@
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(289, 20);
             this.tbName.TabIndex = 12;
+            this.tbName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbName_KeyDown);
             this.tbName.Leave += new System.EventHandler(this.tbName_TextChanged);
             // 
             // lEmail
@@ -301,6 +302,8 @@
             this.Text = "Список проектов";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjectListForm_FormClosing);
             this.Load += new System.EventHandler(this.ProjectListForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ProjectListForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProjectListForm_KeyPress);
             this.grRepoControls.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

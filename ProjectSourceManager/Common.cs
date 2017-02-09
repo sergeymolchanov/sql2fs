@@ -16,6 +16,7 @@ namespace ProjectSourceManager
         static readonly MD5 md5 = System.Security.Cryptography.MD5.Create();
 
         public static readonly DirectoryInfo RootDir = new DirectoryInfo(Application.StartupPath);
+        public static readonly String VersionedObjectTypes = "'FN', 'IF', 'P', 'TF', 'TR', 'V'";
 
         public static byte[] CalculateMD5Hash(byte[] inputBytes)
         {
