@@ -198,7 +198,6 @@
             // 
             this.tbReportRoot.Location = new System.Drawing.Point(120, 217);
             this.tbReportRoot.Name = "tbReportRoot";
-            this.tbReportRoot.PasswordChar = '*';
             this.tbReportRoot.Size = new System.Drawing.Size(463, 20);
             this.tbReportRoot.TabIndex = 19;
             // 

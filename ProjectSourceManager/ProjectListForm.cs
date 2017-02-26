@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
-using ProjectSourceManager.Adapters;
-using ProjectSourceManager.Exceptions;
+using sql2fsbase.Adapters;
+using sql2fsbase.Exceptions;
 using System.IO;
+using sql2fsbase;
+using ProjectSourceManager.Adapters.Impl.DBContent;
+using sql2fsbase.Adapters.Impl.DBContent;
 
 namespace ProjectSourceManager
 {
@@ -67,15 +70,20 @@ namespace ProjectSourceManager
             reloadControls();
         }
 
+        private AdapterManager BuildAdapterManager(ProjectDirectory dir)
+        {
+            return new AdapterManager(dir);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (lbDir.Items.Count == 0) return;
 
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
+            ProjectDirectory dir = lbDir.SelectedItem as ProjectDirectory;
 
-            if (dir == null) return;
+            if (lbDir.SelectedItem == null) return;
 
-            AdapterManager manager = new AdapterManager(dir);
+            AdapterManager manager = BuildAdapterManager(dir);
 
             DoThreadedAction(dir, true);
 
@@ -190,7 +198,7 @@ namespace ProjectSourceManager
 
             if (dir == null) return;
 
-            dir.Pull();
+            dir.Pull(true);
         }
 
         private void btnMerge_Click(object sender, EventArgs e)
@@ -221,8 +229,8 @@ namespace ProjectSourceManager
             if (onTimer) return;
             onTimer = true;
             bool isThreadRunning = _thread != null && _thread.ThreadState == ThreadState.Running;
-            btnDump.Enabled = !isThreadRunning;
-            btnRestore.Enabled = !isThreadRunning && !isRepoClosed;
+            btnDump.Enabled = !isThreadRunning && (isRepoClosed || cbExpert.Checked);
+            btnRestore.Enabled = !isThreadRunning && (!isRepoClosed || cbExpert.Checked);
 
             ProgressBarForm.Instance.Visible = isThreadRunning;
 
@@ -282,6 +290,10 @@ namespace ProjectSourceManager
 
             grRepoControls.Enabled = !isRepoClosed;
             lMode.Text = isRepoClosed?"Работа в БД":"Работа в репозитарии";
+
+            cbForce.Enabled = cbExpert.Checked;
+            if (!cbForce.Enabled && cbForce.Checked)
+                cbForce.Checked = false;
         }
 
         private bool isRepoClosed = false;
@@ -318,10 +330,11 @@ namespace ProjectSourceManager
 
         private void tbName_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Alt && e.KeyCode == Keys.S)
-            {
-                new SendForm().Show();
-            }
+        }
+
+        private void cbExpert_CheckedChanged(object sender, EventArgs e)
+        {
+            reloadControls();
         }
     }
 }

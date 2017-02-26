@@ -50,6 +50,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lMode = new System.Windows.Forms.Label();
             this.cbForce = new System.Windows.Forms.CheckBox();
+            this.cbExpert = new System.Windows.Forms.CheckBox();
             this.grRepoControls.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +63,7 @@
             this.lbDir.FormattingEnabled = true;
             this.lbDir.Location = new System.Drawing.Point(12, 12);
             this.lbDir.Name = "lbDir";
-            this.lbDir.Size = new System.Drawing.Size(330, 303);
+            this.lbDir.Size = new System.Drawing.Size(323, 394);
             this.lbDir.TabIndex = 0;
             this.lbDir.SelectedIndexChanged += new System.EventHandler(this.lbDir_SelectedIndexChanged);
             this.lbDir.DoubleClick += new System.EventHandler(this.lbDir_DoubleClick);
@@ -70,7 +71,7 @@
             // btnAdd
             // 
             this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(12, 325);
+            this.btnAdd.Location = new System.Drawing.Point(12, 419);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 1;
@@ -159,7 +160,7 @@
             this.cbOtherThread.AutoSize = true;
             this.cbOtherThread.Checked = true;
             this.cbOtherThread.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbOtherThread.Location = new System.Drawing.Point(359, 379);
+            this.cbOtherThread.Location = new System.Drawing.Point(352, 379);
             this.cbOtherThread.Name = "cbOtherThread";
             this.cbOtherThread.Size = new System.Drawing.Size(86, 17);
             this.cbOtherThread.TabIndex = 10;
@@ -170,20 +171,22 @@
             // 
             this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(53, 380);
+            this.tbEmail.Location = new System.Drawing.Point(53, 403);
             this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(289, 20);
+            this.tbEmail.Size = new System.Drawing.Size(282, 20);
             this.tbEmail.TabIndex = 11;
+            this.tbEmail.Visible = false;
             this.tbEmail.Leave += new System.EventHandler(this.tbName_TextChanged);
             // 
             // tbName
             // 
             this.tbName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbName.Location = new System.Drawing.Point(53, 354);
+            this.tbName.Location = new System.Drawing.Point(53, 377);
             this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(289, 20);
+            this.tbName.Size = new System.Drawing.Size(282, 20);
             this.tbName.TabIndex = 12;
+            this.tbName.Visible = false;
             this.tbName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbName_KeyDown);
             this.tbName.Leave += new System.EventHandler(this.tbName_TextChanged);
             // 
@@ -192,22 +195,24 @@
             this.lEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lEmail.AutoSize = true;
-            this.lEmail.Location = new System.Drawing.Point(12, 383);
+            this.lEmail.Location = new System.Drawing.Point(12, 406);
             this.lEmail.Name = "lEmail";
             this.lEmail.Size = new System.Drawing.Size(32, 13);
             this.lEmail.TabIndex = 13;
             this.lEmail.Text = "Email";
+            this.lEmail.Visible = false;
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 358);
+            this.label2.Location = new System.Drawing.Point(12, 381);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 14;
             this.label2.Text = "Name";
+            this.label2.Visible = false;
             // 
             // grRepoControls
             // 
@@ -218,7 +223,7 @@
             this.grRepoControls.Controls.Add(this.btn_pull);
             this.grRepoControls.Controls.Add(this.btnMerge);
             this.grRepoControls.Controls.Add(this.btnLog);
-            this.grRepoControls.Location = new System.Drawing.Point(348, 166);
+            this.grRepoControls.Location = new System.Drawing.Point(341, 166);
             this.grRepoControls.Name = "grRepoControls";
             this.grRepoControls.Size = new System.Drawing.Size(151, 202);
             this.grRepoControls.TabIndex = 15;
@@ -240,7 +245,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.btnDump);
             this.groupBox1.Controls.Add(this.btnRestore);
-            this.groupBox1.Location = new System.Drawing.Point(348, 75);
+            this.groupBox1.Location = new System.Drawing.Point(341, 75);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(151, 85);
             this.groupBox1.TabIndex = 16;
@@ -251,7 +256,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(351, 12);
+            this.label1.Location = new System.Drawing.Point(344, 12);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 17;
@@ -263,7 +268,7 @@
             this.lMode.AutoSize = true;
             this.lMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMode.ForeColor = System.Drawing.Color.Maroon;
-            this.lMode.Location = new System.Drawing.Point(356, 31);
+            this.lMode.Location = new System.Drawing.Point(349, 31);
             this.lMode.Name = "lMode";
             this.lMode.Size = new System.Drawing.Size(23, 13);
             this.lMode.TabIndex = 18;
@@ -273,18 +278,31 @@
             // 
             this.cbForce.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbForce.AutoSize = true;
-            this.cbForce.Location = new System.Drawing.Point(359, 398);
+            this.cbForce.Location = new System.Drawing.Point(352, 425);
             this.cbForce.Name = "cbForce";
             this.cbForce.Size = new System.Drawing.Size(53, 17);
             this.cbForce.TabIndex = 19;
             this.cbForce.Text = "Force";
             this.cbForce.UseVisualStyleBackColor = true;
             // 
+            // cbExpert
+            // 
+            this.cbExpert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbExpert.AutoSize = true;
+            this.cbExpert.Location = new System.Drawing.Point(352, 402);
+            this.cbExpert.Name = "cbExpert";
+            this.cbExpert.Size = new System.Drawing.Size(105, 17);
+            this.cbExpert.TabIndex = 20;
+            this.cbExpert.Text = "I know what I do";
+            this.cbExpert.UseVisualStyleBackColor = true;
+            this.cbExpert.CheckedChanged += new System.EventHandler(this.cbExpert_CheckedChanged);
+            // 
             // ProjectListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 427);
+            this.ClientSize = new System.Drawing.Size(504, 450);
+            this.Controls.Add(this.cbExpert);
             this.Controls.Add(this.cbForce);
             this.Controls.Add(this.lMode);
             this.Controls.Add(this.label1);
@@ -334,6 +352,7 @@
         private System.Windows.Forms.Label lMode;
         private System.Windows.Forms.Button btnSwitch;
         private System.Windows.Forms.CheckBox cbForce;
+        private System.Windows.Forms.CheckBox cbExpert;
 
     }
 }

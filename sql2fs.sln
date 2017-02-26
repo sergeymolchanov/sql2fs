@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectSourceManager", "ProjectSourceManager\ProjectSourceManager.csproj", "{E34C63AF-6EF6-45F6-97AB-070DEAD5CCB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sql2fsbase", "sql2fsbase\sql2fsbase.csproj", "{F532610E-8841-4D13-B3A2-4C86CD819B83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PsmProc", "PsmProc\PsmProc.csproj", "{65CCDEB4-D15B-4BAF-81C6-1420CAB16C1C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{E34C63AF-6EF6-45F6-97AB-070DEAD5CCB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E34C63AF-6EF6-45F6-97AB-070DEAD5CCB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E34C63AF-6EF6-45F6-97AB-070DEAD5CCB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F532610E-8841-4D13-B3A2-4C86CD819B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F532610E-8841-4D13-B3A2-4C86CD819B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F532610E-8841-4D13-B3A2-4C86CD819B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F532610E-8841-4D13-B3A2-4C86CD819B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65CCDEB4-D15B-4BAF-81C6-1420CAB16C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65CCDEB4-D15B-4BAF-81C6-1420CAB16C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65CCDEB4-D15B-4BAF-81C6-1420CAB16C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65CCDEB4-D15B-4BAF-81C6-1420CAB16C1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
