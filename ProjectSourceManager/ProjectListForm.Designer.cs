@@ -43,8 +43,6 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCheck = new System.Windows.Forms.Button();
             this.btnMergeProj = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lMode = new System.Windows.Forms.Label();
             this.cbForce = new System.Windows.Forms.CheckBox();
             this.cbExpert = new System.Windows.Forms.CheckBox();
             this.btn_config = new System.Windows.Forms.Button();
@@ -197,26 +195,6 @@
             this.btnMergeProj.UseVisualStyleBackColor = true;
             this.btnMergeProj.Click += new System.EventHandler(this.button2_Click);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Режим работы:";
-            // 
-            // lMode
-            // 
-            this.lMode.AutoSize = true;
-            this.lMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lMode.ForeColor = System.Drawing.Color.Maroon;
-            this.lMode.Location = new System.Drawing.Point(25, 28);
-            this.lMode.Name = "lMode";
-            this.lMode.Size = new System.Drawing.Size(23, 13);
-            this.lMode.TabIndex = 18;
-            this.lMode.Text = "РР";
-            // 
             // cbForce
             // 
             this.cbForce.AutoSize = true;
@@ -240,7 +218,7 @@
             // 
             // btn_config
             // 
-            this.btn_config.Location = new System.Drawing.Point(23, 44);
+            this.btn_config.Location = new System.Drawing.Point(23, 28);
             this.btn_config.Name = "btn_config";
             this.btn_config.Size = new System.Drawing.Size(136, 23);
             this.btn_config.TabIndex = 21;
@@ -256,8 +234,6 @@
             this.Controls.Add(this.btn_config);
             this.Controls.Add(this.cbExpert);
             this.Controls.Add(this.cbForce);
-            this.Controls.Add(this.lMode);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grRepoControls);
             this.Controls.Add(this.cbOtherThread);
@@ -288,8 +264,6 @@
         private System.Windows.Forms.CheckBox cbOtherThread;
         private System.Windows.Forms.GroupBox grRepoControls;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lMode;
         private System.Windows.Forms.Button btnSwitch;
         private System.Windows.Forms.CheckBox cbForce;
         private System.Windows.Forms.CheckBox cbExpert;

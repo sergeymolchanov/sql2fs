@@ -173,8 +173,8 @@ namespace ProjectSourceManager
             if (onTimer) return;
             onTimer = true;
             bool isThreadRunning = _thread != null && _thread.ThreadState == ThreadState.Running;
-            btnDump.Enabled = !isThreadRunning && (isRepoClosed || cbExpert.Checked);
-            btnRestore.Enabled = !isThreadRunning && (!isRepoClosed || cbExpert.Checked);
+            btnDump.Enabled = cbExpert.Checked && !isThreadRunning;
+            btnRestore.Enabled = cbExpert.Checked && !isThreadRunning;
 
             ProgressBarForm.Instance.Visible = isThreadRunning;
 
@@ -216,17 +216,10 @@ namespace ProjectSourceManager
 
         private void reloadControls()
         {
-            isRepoClosed = dir.IsRepoLocked;
-
-            grRepoControls.Enabled = !isRepoClosed;
-            lMode.Text = isRepoClosed?"Работа в БД":"Работа в репозитарии";
-
             cbForce.Enabled = cbExpert.Checked;
             if (!cbForce.Enabled && cbForce.Checked)
                 cbForce.Checked = false;
         }
-
-        private bool isRepoClosed = false;
 
         private void btnSwitch_Click(object sender, EventArgs e)
         {
