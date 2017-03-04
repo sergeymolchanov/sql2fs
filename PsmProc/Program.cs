@@ -1,5 +1,7 @@
 ﻿using sql2fsbase;
 using sql2fsbase.Adapters;
+using sql2fsbase.Adapters.Impl;
+using sql2fsbase.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,51 +13,99 @@ namespace PsmProc
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             Common.OutProc = Console.WriteLine;
 
             AdapterManager.SqlErrorViewInstance = new SqlErrorView();
             AdapterManager.TableRowComparerInstance = new TableRowComparer();
 
-            if (args.Length < 2)
+            DirectoryInfo dir = null;
+            if (args.Length > 1)
             {
-                PrintHelp();
-                return;
+                dir = new DirectoryInfo(args[1]);
+                if (!dir.Exists)
+                {
+                    Console.WriteLine("Project not found: {0}", args[1]);
+                    return 1;
+                }
             }
-
-            String projectName = args[0];
-            String command = args[1];
-
-            DirectoryInfo dir = new DirectoryInfo(Common.RootDir.FullName + "\\" + projectName);
-            if (!dir.Exists)
+            else
             {
-                Console.WriteLine("Project not found {0}", projectName);
-                return;
+                dir = new DirectoryInfo(Common.RootDir.FullName);
             }
 
             ProjectDirectory projectDir = new ProjectDirectory(dir);
+            projectDir.CheckGitHooks();
 
-            if (command == "deploy")
+            String command = args.Length > 0 ? args[0].ToLower() : "merge";
+
+            if (command == "merge")
             {
-                projectDir.Restore(true);
+                try
+                {
+                    projectDir.Merge(false);
+                }
+                catch (sql2fsbase.Exceptions.ObjectChangedException ex)
+                {
+                    Console.WriteLine("Object '{0}' is changed both side. Need manual merge.", ex.Item.Name);
+                    return 1;
+                }
+                catch (SyncErrorsException ex)
+                {
+                    Console.WriteLine("Can't merge, error sql in file 'errors.sql'");
+
+                    using (TextWriter sw = new StreamWriter("errors.sql"))
+                    {
+                        foreach (AdapterBaseSQL.AdapterSqlException err in ex.ErrorList)
+                        {
+                            sw.WriteLine(err.Sql);
+                            sw.WriteLine();
+                            sw.WriteLine();
+                            sw.WriteLine("===========================================");
+                        }
+                    }
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                    return 1;
+                }
+                return 0;
             }
-            else if (command == "pull-deploy")
+            else if (command == "check")
             {
-                projectDir.Pull(false);
-                projectDir.Restore(true);
+                try
+                {
+                    projectDir.Merge(true);
+                }
+                catch (sql2fsbase.Exceptions.ObjectChangedException ex)
+                {
+                    Console.WriteLine("Object '{0}' is changed. Need merge.", ex.Item.Name);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                    return 1;
+                }
+                return 0;
             }
-            else if (command == "dump")
+            else
             {
-                projectDir.Dump(true);
+                PrintHelp();
+                return 1;
             }
         }
 
         static void PrintHelp()
         {
-            Console.WriteLine("Using: 'PsmProc <project> <command>'");
+            Console.WriteLine("Using: 'PsmProc <command> [<project path>]'");
             Console.WriteLine("<project> = name of folder with project sources");
-            Console.WriteLine("<command> = 'deploy'");
+            Console.WriteLine("<command> = 'merge'");
         }
     }
 }

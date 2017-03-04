@@ -25,7 +25,7 @@ namespace sql2fsbase
 
         public void Dump(bool force)
         {
-            Common.Out("Dump '{0}'{1}", Name, force?" with FORCE":"");
+            Common.Out("Dump '{0}'{1}", Name, force ? " with FORCE" : "");
 
             String actualCommitId = GetActualCommitId();
             byte[] validCommitBytes = this.LoadFile("", VALID_COMMIT_FILE);
@@ -58,13 +58,24 @@ namespace sql2fsbase
             IsRepoLocked = true;
         }
 
+        public void Merge(bool onlyCheck)
+        {
+            if (onlyCheck)
+                Common.Out("Check '{0}'", Name);
+            else
+                Common.Out("Merge '{0}'", Name);
+
+            AdapterManager manager = new AdapterManager(this);
+            manager.Merge(onlyCheck);
+        }
+
         public bool IsRepoLocked
         {
             get { return this.LoadFile("", REPO_LOCK_FILE) != null; }
             private set
             {
                 if (value)
-                    this.StoreFile("", REPO_LOCK_FILE, new byte[1] {0});
+                    this.StoreFile("", REPO_LOCK_FILE, new byte[1] { 0 });
                 else
                     this.DeleteFile("", REPO_LOCK_FILE);
             }
@@ -103,7 +114,7 @@ namespace sql2fsbase
             RunTortoiseGitCommand("push");
         }
 
-        public void Merge()
+        public void MergeWindow()
         {
             RunTortoiseGitCommand("merge");
         }
@@ -117,7 +128,7 @@ namespace sql2fsbase
         {
             RunTortoiseGitCommand("switch");
         }
-        
+
 
         public void StoreFile(String prefix, String name, byte[] data)
         {
@@ -181,26 +192,12 @@ namespace sql2fsbase
             File.SetLastWriteTime(_file, date);
         }
 
-        private void SetWhoAmI()
-        {
-            String _username = Common.GlobalSettings.Instance.UserName;
-            String _email = Common.GlobalSettings.Instance.Email;
-            /*
-            if (_username.Length < 5 || _email.Length < 4)
-            {
-                MessageBox.Show("Необходимо ввести имя и email");
-            }*/
-            String whoami = String.Format("\"{0} <{1}>\"", _username, _email);
-
-            //System.Diagnostics.Process.Start(gitProc, String.Format(@" {0} {1}", "whoami", whoami));
-        }
-
         private String RunGitCommand(String cmd)
         {
             Common.Out("Execute " + cmd);
             String dest = Dir.FullName;
-            String gitProc = String.Format(@"{0}\git\bin\git.exe", Common.RootDir.FullName);
-            
+            String gitProc = String.Format(@"git", Common.RootDir.FullName);
+
             StringBuilder b = new StringBuilder();
 
             Process p = new Process();
@@ -223,7 +220,7 @@ namespace sql2fsbase
         {
             Common.Out("Execute " + cmd);
             String dest = Dir.FullName;
-            String gitProc = String.Format(@"{0}\git\TortoiseGit\bin\TortoiseGitProc.exe", Common.RootDir.FullName);
+            String gitProc = String.Format(@"TortoiseGitProc.exe", Common.RootDir.FullName);
             String fullCmd = String.Format(@"/command:{0} /path:{1}", cmd, Dir.FullName);
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
@@ -245,6 +242,25 @@ namespace sql2fsbase
             String commitHash = commit.Split(' ')[0];
 
             return commitHash.Trim();
+        }
+
+        public void CheckGitHooks()
+        {
+            try
+            {
+                DirectoryInfo di = new DirectoryInfo(Dir.FullName + "/Hooks/Git");
+                foreach (FileInfo fi in di.GetFiles())
+                {
+                    try
+                    {
+                        File.Copy(fi.FullName, Dir.FullName + "/.git/hooks/" + fi.Name, true);
+                    }
+                    catch (IOException e)
+                    { }
+                }
+            }
+            catch (IOException e)
+            { }
         }
     }
 }

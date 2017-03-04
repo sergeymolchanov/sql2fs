@@ -32,6 +32,72 @@ namespace sql2fsbase.Adapters
             return new List<string>();
         }
 
+        public void Merge(bool onlyCheck)
+        {
+            DateTime? remoteModifyDate = RemoteModifyDate;
+            if (remoteModifyDate != null)
+            {
+                DateTime? localModifyDate = Project.GetLocalModifyTime(Adapter.Prefix, Name + Adapter.Postfix);
+                if (localModifyDate != null && localModifyDate.Value.Equals(remoteModifyDate.Value))
+                    return;
+            }
+
+            byte[] remoteData = Pull();
+            byte[] remoteHash = Common.CalculateMD5Hash(remoteData);
+            byte[] localData = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix);
+            byte[] localHash = Common.CalculateMD5Hash(localData);
+
+            byte[] masterHash = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5");
+
+            bool changedLocal = !ByteArrayEqual(localHash, masterHash);
+            bool changedRemote = !ByteArrayEqual(remoteHash, masterHash);
+            bool changedHash = (changedLocal || changedRemote) && ByteArrayEqual(localHash, remoteHash);
+
+            if (changedHash)
+            {
+                Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5", remoteHash);
+                changedLocal = false;
+                changedRemote = false;
+            }
+
+            if (onlyCheck)
+            {
+                if (changedLocal || changedRemote)
+                    throw new ObjectChangedException(this);
+                else
+                    return;
+            }
+            
+            if (changedLocal && changedRemote)
+            {
+                throw new ObjectChangedException(this);
+            }
+            else if (changedLocal)
+            {
+                Push(localData);
+
+                byte[] newRemoteData = Pull();
+                byte[] newRemoteHash = Common.CalculateMD5Hash(newRemoteData);
+                Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5", newRemoteHash);
+            }
+            else if (changedRemote)
+            {
+                if (remoteData != null && remoteData.Length > 0)
+                {
+                    Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix, remoteData);
+                    Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5", remoteHash);
+
+                    if (remoteModifyDate != null)
+                        Project.SetLocalModifyTime(Adapter.Prefix, Name + Adapter.Postfix, remoteModifyDate.Value);
+                }
+                else
+                {
+                    Project.DeleteFile(Adapter.Prefix, Name + Adapter.Postfix);
+                    Project.DeleteFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5");
+                }
+            }
+        }
+
         public void Dump()
         {
             DateTime? remoteModifyDate = RemoteModifyDate;
@@ -94,6 +160,9 @@ namespace sql2fsbase.Adapters
 
         private bool ByteArrayEqual(byte[] b1, byte[] b2)
         {
+            if (b1 == null && b2 == null)
+                return true;
+
             if (b1 == null || b2 == null || b1.Length != b2.Length)
                 return false;
 

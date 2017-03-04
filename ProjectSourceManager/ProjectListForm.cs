@@ -14,58 +14,23 @@ namespace ProjectSourceManager
     public partial class ProjectListForm : Form
     {
         private static ProjectListForm _instance;
+        private ProjectDirectory dir;
+        private AdapterManager manager;
 
         public ProjectListForm()
         {
             _instance = this;
             InitializeComponent();
-            ReloadProjects();
-        }
 
-        private void ReloadProjects()
-        {
-            List<ProjectDirectory> l = new List<ProjectDirectory>();
-
-            foreach (var dir in Common.RootDir.GetDirectories())
-            {
-                if (dir.Name.ToLower() == "git")
-                    continue;
-
-                if (dir.Name.ToLower() == "bazaar")
-                    continue;
-
-                l.Add(new ProjectDirectory(dir));
-            }
-
-            l.Sort();
-
-            lbDir.Items.Clear();
-            foreach (var dir in l)
-            {
-                lbDir.Items.Add(dir);
-                if (dir.Name == Common.GlobalSettings.Instance.LastProject)
-                    lbDir.SelectedItem = dir;
-            }
-
-            reloadControls();
+            dir = new ProjectDirectory(Common.RootDir);
+            manager = BuildAdapterManager(dir);
+            dir.CheckGitHooks();
         }
 
         private void lbDir_DoubleClick(object sender, EventArgs e)
-        {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
+        {            
             ProjectEditor editForm = new ProjectEditor();
             editForm.ShowProject(dir);
-
-            reloadControls();
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            ProjectEditor editForm = new ProjectEditor();
-            editForm.ShowProject(null);
 
             reloadControls();
         }
@@ -77,41 +42,35 @@ namespace ProjectSourceManager
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = lbDir.SelectedItem as ProjectDirectory;
-
-            if (lbDir.SelectedItem == null) return;
-
-            AdapterManager manager = BuildAdapterManager(dir);
-
-            DoThreadedAction(dir, true);
+            DoThreadedAction(dir, ThreadedAction.Dump);
 
             reloadControls();
         }
 
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
-            DoThreadedAction(dir, false);
+            DoThreadedAction(dir, ThreadedAction.Restore);
 
             reloadControls();
         }
 
         private static ProjectDirectory _project;
-        private static bool _threadIsDump;
+        private static ThreadedAction _threadAction;
         private static Exception _threadException = null;
         private static Thread _thread = null;
 
-        private void DoThreadedAction(ProjectDirectory project, bool isDump)
+        enum ThreadedAction
+        {
+            Dump,
+            Restore,
+            Merge,
+            Check
+        }
+
+        private void DoThreadedAction(ProjectDirectory project, ThreadedAction action)
         {
             _project = project;
-            _threadIsDump = isDump;
+            _threadAction = action;
 
             if (cbOtherThread.Checked)
             {
@@ -134,13 +93,21 @@ namespace ProjectSourceManager
             {
                 try
                 {
-                    if (_threadIsDump)
+                    if (_threadAction == ThreadedAction.Dump)
                     {
                         _project.Dump(cbForce.Checked);
                     }
-                    else
+                    else if (_threadAction == ThreadedAction.Restore)
                     {
                         _project.Restore(cbForce.Checked);
+                    }
+                    else if (_threadAction == ThreadedAction.Merge)
+                    {
+                        _project.Merge(false);
+                    }
+                    else if (_threadAction == ThreadedAction.Check)
+                    {
+                        _project.Merge(true);
                     }
                 }
                 catch (Exception exception)
@@ -152,13 +119,21 @@ namespace ProjectSourceManager
             }
             else
             {
-                if (_threadIsDump)
+                if (_threadAction == ThreadedAction.Dump)
                 {
                     _project.Dump(cbForce.Checked);
                 }
-                else
+                else if (_threadAction == ThreadedAction.Restore)
                 {
                     _project.Restore(cbForce.Checked);
+                }
+                else if (_threadAction == ThreadedAction.Merge)
+                {
+                    _project.Merge(false);
+                }
+                else if (_threadAction == ThreadedAction.Check)
+                {
+                    _project.Merge(true);
                 }
             }
 
@@ -169,57 +144,26 @@ namespace ProjectSourceManager
 
         private void btn_commit_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             dir.Commit();
         }
 
         private void btn_push_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             dir.Push();
         }
 
         private void btn_pull_Click(object sender, EventArgs e)
         {
-
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             dir.Pull(true);
         }
 
         private void btnMerge_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
-            dir.Merge();
+            dir.MergeWindow();
         }
 
         private void btnLog_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             dir.Log();
         }
 
@@ -258,8 +202,6 @@ namespace ProjectSourceManager
 
         private void ProjectListForm_Load(object sender, EventArgs e)
         {
-            tbName.Text = Common.GlobalSettings.Instance.UserName;
-            tbEmail.Text = Common.GlobalSettings.Instance.Email;
             reloadControls();
         }
 
@@ -270,22 +212,10 @@ namespace ProjectSourceManager
 
         private void ProjectListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            tbName_TextChanged(sender, null);
-
-            if (lbDir.Items.Count > 0 && lbDir.SelectedItem != null)
-                Common.GlobalSettings.Instance.LastProject = ((ProjectDirectory)lbDir.SelectedItem).Name;
-
-            Common.GlobalSettings.Save();
         }
 
         private void reloadControls()
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             isRepoClosed = dir.IsRepoLocked;
 
             grRepoControls.Enabled = !isRepoClosed;
@@ -298,20 +228,8 @@ namespace ProjectSourceManager
 
         private bool isRepoClosed = false;
 
-        private void tbName_TextChanged(object sender, EventArgs e)
-        {
-            Common.GlobalSettings.Instance.UserName = tbName.Text;
-            Common.GlobalSettings.Instance.Email = tbEmail.Text;
-        }
-
         private void btnSwitch_Click(object sender, EventArgs e)
         {
-            if (lbDir.Items.Count == 0) return;
-
-            ProjectDirectory dir = (ProjectDirectory)lbDir.SelectedItem;
-
-            if (dir == null) return;
-
             dir.Switch();
         }
 
@@ -324,17 +242,28 @@ namespace ProjectSourceManager
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-        }
-
-        private void tbName_KeyDown(object sender, KeyEventArgs e)
-        {
-        }
-
         private void cbExpert_CheckedChanged(object sender, EventArgs e)
         {
             reloadControls();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DoThreadedAction(dir, ThreadedAction.Merge);
+
+            reloadControls();
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            DoThreadedAction(dir, ThreadedAction.Check);
+
+            reloadControls();
+        }
+
+        private void btn_config_Click(object sender, EventArgs e)
+        {
+            new ProjectEditor().ShowProject(dir);
         }
     }
 }

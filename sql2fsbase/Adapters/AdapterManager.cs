@@ -55,6 +55,19 @@ namespace sql2fsbase.Adapters
             }
         }
 
+        public void Merge(bool onlyCheck)
+        {
+            LongOperationState.Timer2Pos = 0;
+            LongOperationState.Timer2Max = Adapters.Count;
+
+            foreach (var item in Adapters)
+            {
+                LongOperationState.Timer2Text = "Загрузка " + item.Prefix;
+                item.Merge(onlyCheck);
+                LongOperationState.Timer2Pos++;
+            }
+        }
+
         public void Dump(bool force)
         {
             LongOperationState.Timer2Pos = 0;

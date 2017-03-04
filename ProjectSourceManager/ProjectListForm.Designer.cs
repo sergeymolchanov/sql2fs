@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.lbDir = new System.Windows.Forms.ListBox();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.btnDump = new System.Windows.Forms.Button();
             this.btnRestore = new System.Windows.Forms.Button();
             this.btn_commit = new System.Windows.Forms.Button();
@@ -40,44 +38,19 @@
             this.btnMerge = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.cbOtherThread = new System.Windows.Forms.CheckBox();
-            this.tbEmail = new System.Windows.Forms.TextBox();
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.lEmail = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.grRepoControls = new System.Windows.Forms.GroupBox();
             this.btnSwitch = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCheck = new System.Windows.Forms.Button();
+            this.btnMergeProj = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.lMode = new System.Windows.Forms.Label();
             this.cbForce = new System.Windows.Forms.CheckBox();
             this.cbExpert = new System.Windows.Forms.CheckBox();
+            this.btn_config = new System.Windows.Forms.Button();
             this.grRepoControls.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lbDir
-            // 
-            this.lbDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbDir.FormattingEnabled = true;
-            this.lbDir.Location = new System.Drawing.Point(12, 12);
-            this.lbDir.Name = "lbDir";
-            this.lbDir.Size = new System.Drawing.Size(323, 394);
-            this.lbDir.TabIndex = 0;
-            this.lbDir.SelectedIndexChanged += new System.EventHandler(this.lbDir_SelectedIndexChanged);
-            this.lbDir.DoubleClick += new System.EventHandler(this.lbDir_DoubleClick);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Location = new System.Drawing.Point(12, 419);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(75, 23);
-            this.btnAdd.TabIndex = 1;
-            this.btnAdd.Text = "Создать";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnDump
             // 
@@ -156,74 +129,25 @@
             // 
             // cbOtherThread
             // 
-            this.cbOtherThread.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbOtherThread.AutoSize = true;
             this.cbOtherThread.Checked = true;
             this.cbOtherThread.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbOtherThread.Location = new System.Drawing.Point(352, 379);
+            this.cbOtherThread.Location = new System.Drawing.Point(17, 228);
             this.cbOtherThread.Name = "cbOtherThread";
             this.cbOtherThread.Size = new System.Drawing.Size(86, 17);
             this.cbOtherThread.TabIndex = 10;
             this.cbOtherThread.Text = "OtherThread";
             this.cbOtherThread.UseVisualStyleBackColor = true;
             // 
-            // tbEmail
-            // 
-            this.tbEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbEmail.Location = new System.Drawing.Point(53, 403);
-            this.tbEmail.Name = "tbEmail";
-            this.tbEmail.Size = new System.Drawing.Size(282, 20);
-            this.tbEmail.TabIndex = 11;
-            this.tbEmail.Visible = false;
-            this.tbEmail.Leave += new System.EventHandler(this.tbName_TextChanged);
-            // 
-            // tbName
-            // 
-            this.tbName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbName.Location = new System.Drawing.Point(53, 377);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(282, 20);
-            this.tbName.TabIndex = 12;
-            this.tbName.Visible = false;
-            this.tbName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbName_KeyDown);
-            this.tbName.Leave += new System.EventHandler(this.tbName_TextChanged);
-            // 
-            // lEmail
-            // 
-            this.lEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lEmail.AutoSize = true;
-            this.lEmail.Location = new System.Drawing.Point(12, 406);
-            this.lEmail.Name = "lEmail";
-            this.lEmail.Size = new System.Drawing.Size(32, 13);
-            this.lEmail.TabIndex = 13;
-            this.lEmail.Text = "Email";
-            this.lEmail.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 381);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Name";
-            this.label2.Visible = false;
-            // 
             // grRepoControls
             // 
-            this.grRepoControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.grRepoControls.Controls.Add(this.btnSwitch);
             this.grRepoControls.Controls.Add(this.btn_commit);
             this.grRepoControls.Controls.Add(this.btn_push);
             this.grRepoControls.Controls.Add(this.btn_pull);
             this.grRepoControls.Controls.Add(this.btnMerge);
             this.grRepoControls.Controls.Add(this.btnLog);
-            this.grRepoControls.Location = new System.Drawing.Point(341, 166);
+            this.grRepoControls.Location = new System.Drawing.Point(174, 9);
             this.grRepoControls.Name = "grRepoControls";
             this.grRepoControls.Size = new System.Drawing.Size(151, 202);
             this.grRepoControls.TabIndex = 15;
@@ -242,21 +166,41 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnCheck);
+            this.groupBox1.Controls.Add(this.btnMergeProj);
             this.groupBox1.Controls.Add(this.btnDump);
             this.groupBox1.Controls.Add(this.btnRestore);
-            this.groupBox1.Location = new System.Drawing.Point(341, 75);
+            this.groupBox1.Location = new System.Drawing.Point(17, 72);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(151, 85);
+            this.groupBox1.Size = new System.Drawing.Size(151, 139);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Синхронизация";
             // 
+            // btnCheck
+            // 
+            this.btnCheck.Location = new System.Drawing.Point(6, 106);
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(136, 23);
+            this.btnCheck.TabIndex = 4;
+            this.btnCheck.Text = "Проверить различия";
+            this.btnCheck.UseVisualStyleBackColor = true;
+            this.btnCheck.Click += new System.EventHandler(this.button1_Click_2);
+            // 
+            // btnMergeProj
+            // 
+            this.btnMergeProj.Location = new System.Drawing.Point(6, 77);
+            this.btnMergeProj.Name = "btnMergeProj";
+            this.btnMergeProj.Size = new System.Drawing.Size(136, 23);
+            this.btnMergeProj.TabIndex = 5;
+            this.btnMergeProj.Text = "Синхронизировать";
+            this.btnMergeProj.UseVisualStyleBackColor = true;
+            this.btnMergeProj.Click += new System.EventHandler(this.button2_Click);
+            // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(344, 12);
+            this.label1.Location = new System.Drawing.Point(20, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 13);
             this.label1.TabIndex = 17;
@@ -264,11 +208,10 @@
             // 
             // lMode
             // 
-            this.lMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lMode.AutoSize = true;
             this.lMode.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.lMode.ForeColor = System.Drawing.Color.Maroon;
-            this.lMode.Location = new System.Drawing.Point(349, 31);
+            this.lMode.Location = new System.Drawing.Point(25, 28);
             this.lMode.Name = "lMode";
             this.lMode.Size = new System.Drawing.Size(23, 13);
             this.lMode.TabIndex = 18;
@@ -276,9 +219,8 @@
             // 
             // cbForce
             // 
-            this.cbForce.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbForce.AutoSize = true;
-            this.cbForce.Location = new System.Drawing.Point(352, 425);
+            this.cbForce.Location = new System.Drawing.Point(220, 228);
             this.cbForce.Name = "cbForce";
             this.cbForce.Size = new System.Drawing.Size(53, 17);
             this.cbForce.TabIndex = 19;
@@ -287,9 +229,8 @@
             // 
             // cbExpert
             // 
-            this.cbExpert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbExpert.AutoSize = true;
-            this.cbExpert.Location = new System.Drawing.Point(352, 402);
+            this.cbExpert.Location = new System.Drawing.Point(109, 228);
             this.cbExpert.Name = "cbExpert";
             this.cbExpert.Size = new System.Drawing.Size(105, 17);
             this.cbExpert.TabIndex = 20;
@@ -297,27 +238,32 @@
             this.cbExpert.UseVisualStyleBackColor = true;
             this.cbExpert.CheckedChanged += new System.EventHandler(this.cbExpert_CheckedChanged);
             // 
+            // btn_config
+            // 
+            this.btn_config.Location = new System.Drawing.Point(23, 44);
+            this.btn_config.Name = "btn_config";
+            this.btn_config.Size = new System.Drawing.Size(136, 23);
+            this.btn_config.TabIndex = 21;
+            this.btn_config.Text = "Настройки";
+            this.btn_config.UseVisualStyleBackColor = true;
+            this.btn_config.Click += new System.EventHandler(this.btn_config_Click);
+            // 
             // ProjectListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 450);
+            this.ClientSize = new System.Drawing.Size(340, 257);
+            this.Controls.Add(this.btn_config);
             this.Controls.Add(this.cbExpert);
             this.Controls.Add(this.cbForce);
             this.Controls.Add(this.lMode);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grRepoControls);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.lEmail);
-            this.Controls.Add(this.tbName);
-            this.Controls.Add(this.tbEmail);
             this.Controls.Add(this.cbOtherThread);
-            this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.lbDir);
             this.Name = "ProjectListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Список проектов";
+            this.Text = "Проект";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjectListForm_FormClosing);
             this.Load += new System.EventHandler(this.ProjectListForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ProjectListForm_KeyDown);
@@ -331,8 +277,6 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox lbDir;
-        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnDump;
         private System.Windows.Forms.Button btnRestore;
         private System.Windows.Forms.Button btn_commit;
@@ -342,10 +286,6 @@
         private System.Windows.Forms.Button btnMerge;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.CheckBox cbOtherThread;
-        private System.Windows.Forms.TextBox tbEmail;
-        private System.Windows.Forms.TextBox tbName;
-        private System.Windows.Forms.Label lEmail;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox grRepoControls;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
@@ -353,6 +293,9 @@
         private System.Windows.Forms.Button btnSwitch;
         private System.Windows.Forms.CheckBox cbForce;
         private System.Windows.Forms.CheckBox cbExpert;
+        private System.Windows.Forms.Button btnCheck;
+        private System.Windows.Forms.Button btnMergeProj;
+        private System.Windows.Forms.Button btn_config;
 
     }
 }

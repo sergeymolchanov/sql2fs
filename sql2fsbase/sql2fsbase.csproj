@@ -63,6 +63,7 @@
     <Compile Include="Adapters\Impl\VorlagenItem.cs" />
     <Compile Include="Common.cs" />
     <Compile Include="Exceptions\ObjectChangedException.cs" />
+    <Compile Include="Exceptions\SyncErrorsException.cs" />
     <Compile Include="LongOperationState.cs" />
     <Compile Include="ProjectDirectory.cs" />
     <Compile Include="ProjectSettings.cs" />

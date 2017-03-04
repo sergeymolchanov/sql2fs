@@ -1,4 +1,5 @@
 ﻿using sql2fsbase.Adapters.Impl.DBContent;
+using sql2fsbase.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -72,7 +73,7 @@ namespace sql2fsbase.Adapters.Impl
                     bool doCancel = SqlErrorViewInstance.ShowSQL(_errorSQL);
 
                     if (doCancel)
-                        throw new Exception("Есть неисправимые ошибки. Невозможно обновить данные.");
+                        throw new SyncErrorsException(_errorSQL);
                 }
             }
         }

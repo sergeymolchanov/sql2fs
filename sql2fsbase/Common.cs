@@ -159,51 +159,5 @@ namespace sql2fsbase
                 get { return encoding; }
             }
         }
-
-        [Serializable]
-        public class GlobalSettings
-        {
-            private static readonly String _file = Common.RootDir.FullName + @"/global.conf";
-            private static GlobalSettings _instance = null;
-            public static GlobalSettings Instance
-            {
-                get
-                {
-                    if (_instance == null)
-                        Load();
-
-                    return _instance;
-                }
-            }
-
-            [XmlAttribute]
-            public String UserName { get; set; }
-            [XmlAttribute]
-            public String Email { get; set; }
-            [XmlAttribute]
-            public String LastProject { get; set; }
-
-            public static void Save()
-            {
-                using (StreamWriter w = new StreamWriter(_file))
-                {
-                    w.WriteLine(Common.Serialize<GlobalSettings>(Instance));
-                }
-            }
-
-            public static void Load()
-            {
-                if (!File.Exists(_file))
-                {
-                    _instance = new GlobalSettings();
-                    return;
-                }
-
-                using (TextReader r = new StreamReader(_file))
-                {
-                    _instance = Common.Deserialize<GlobalSettings>(r.ReadToEnd());
-                }
-            }
-        }
     }
 }

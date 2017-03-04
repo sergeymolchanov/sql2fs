@@ -113,6 +113,27 @@ namespace sql2fsbase.Adapters
             processErrors();
         }
 
+        public void Merge(bool onlyCheck)
+        {
+            checkTargetDir();
+            clearErrors();
+
+            LongOperationState.Timer1Pos = 0;
+            LongOperationState.Timer1Max = Items.Count;
+
+            DoSort();
+
+            foreach (var item in Items)
+            {
+                LongOperationState.Timer1Pos++;
+                LongOperationState.Timer1Text = item.Name;
+
+                item.Merge(onlyCheck);
+            }
+
+            processErrors();
+        }
+
         public void Check()
         {
             checkTargetDir();
