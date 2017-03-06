@@ -27,17 +27,17 @@ namespace sql2fsbase.Adapters
             Project = project;
             Adapters = new List<AdapterBase>();
 
-            if (Project.Settings.ReportServerURL.Length > 5)
+            if (Project.Settings.ReportServerURL != null && Project.Settings.ReportServerURL.Length > 5)
                 Adapters.Add(new ReportAdapter(project));
 
-            if (Project.Settings.ConnectionString.Length > 5)
+            if (Project.Settings.ConnectionString != null && Project.Settings.ConnectionString.Length > 5)
             {
                 Adapters.Add(new DDLAdapter(project, SqlErrorViewInstance));
                 Adapters.Add(new TableContentAdapter(project, SqlErrorViewInstance, TableRowComparerInstance));
                 Adapters.Add(new StoredProcAdapter(project, SqlErrorViewInstance));
             }
 
-            if (Project.Settings.VorlagenDir.Length > 2)
+            if (Project.Settings.VorlagenDir != null && Project.Settings.VorlagenDir.Length > 2)
             {
                 Adapters.Add(new VorlagenAdapter(project));
             }
