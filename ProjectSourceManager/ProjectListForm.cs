@@ -15,7 +15,7 @@ namespace ProjectSourceManager
     {
         private static ProjectListForm _instance;
         private ProjectDirectory dir;
-        private AdapterManager manager;
+        private AdapterManager manager { get { return BuildAdapterManager(dir); } }
 
         public ProjectListForm()
         {
@@ -23,7 +23,6 @@ namespace ProjectSourceManager
             InitializeComponent();
 
             dir = new ProjectDirectory(Common.RootDir);
-            manager = BuildAdapterManager(dir);
             dir.CheckGitHooks();
         }
 
