@@ -53,12 +53,6 @@
     <Compile Include="AdapterView\SQLErrorView.Designer.cs">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="AdapterView\TableRowComparer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdapterView\TableRowComparer.Designer.cs">
-      <DependentUpon>TableRowComparer.cs</DependentUpon>
-    </Compile>
     <Compile Include="ProgressBarForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,9 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AdapterView\SQLErrorView.resx">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AdapterView\TableRowComparer.resx">
-      <DependentUpon>TableRowComparer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressBarForm.resx">
       <DependentUpon>ProgressBarForm.cs</DependentUpon>

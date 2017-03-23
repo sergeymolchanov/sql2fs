@@ -20,11 +20,11 @@ namespace sql2fsbase.Adapters.Impl
 
         private Encoding _enc = Encoding.Unicode;
 
-        public TableContentItem(AdapterBase adapter, String name, ProjectDirectory project, SqlConnection connection, ITableRowComparer tableRowComparer)
+        private List<String> fieldListDontUpdate = new List<string>();
+
+        public TableContentItem(AdapterBase adapter, String name, ProjectDirectory project, SqlConnection connection)
             : base(adapter, name, project)
         {
-            TableRowComparerInstance = tableRowComparer;
-
             String[] parts = name.Split(':');
             String[] fields = parts[1].Split(',');
 
@@ -35,10 +35,19 @@ namespace sql2fsbase.Adapters.Impl
 
             Name = parts[0];
             Fields = fields;
+            for (int i = 0; i < fields.Length; i++)
+            {
+                Char control = fields[i][0];
+                if (Char.IsLetter(control))
+                    continue;
+
+                fields[i] = fields[i].Substring(1);
+                if (control == '+')
+                    fieldListDontUpdate.Add(fields[i].ToLower());
+            }
+            
             this.connection = connection;
         }
-
-        private ITableRowComparer TableRowComparerInstance;
 
         public override void Push(byte[] data)
         {
@@ -51,7 +60,6 @@ namespace sql2fsbase.Adapters.Impl
 
             List<String> sql = new List<string>();
 
-            bool IsReplaceAll = false;
             for (int i = 0; i < DBData.Rows.Length; i++)
             {
                 String key = DBData.Rows[i].Value[0];
@@ -62,30 +70,19 @@ namespace sql2fsbase.Adapters.Impl
                     {
                         StringBuilder q = new StringBuilder();
                         q.AppendFormat("update {0} ", Name);
+                        bool isFirst = true;
                         for (int j = 1; j < DBData.Fields.Length; j++)
                         {
-                            q.AppendFormat(" {0} {1} = {2} ", (j == 1 ? "set" : ","), DBData.Fields[j],
+                            if (fieldListDontUpdate.Contains(DBData.Fields[j].ToLower()))
+                                continue;
+
+                            q.AppendFormat(" {0} {1} = {2} ", (isFirst ? "set" : ","), DBData.Fields[j],
                                 formatSqlField(srcRows[key].Value[j]));
+                            isFirst = false;
                         }
                         q.AppendFormat(" where {0} = {1} ", DBData.Fields[0], formatSqlField(srcRows[key].Value[0]));
 
-                        UserAction act = IsReplaceAll? UserAction.Replace : TableRowComparerInstance.CheckRow(DBData.Fields, DBData.Rows[i].Value, srcRows[key].Value,
-                                "Изменение");
-
-                        if (act == UserAction.ReplaceAll)
-                        {
-                            act = UserAction.Replace;
-                            IsReplaceAll = true;
-                        }
-
-                        if (act == UserAction.Replace)
-                        {
-                            sql.Add(q.ToString());
-                        }
-                        else if (act == UserAction.Cancel)
-                        {
-                            return;
-                        }
+                        sql.Add(q.ToString());
                     }
 
                     srcRows.Remove(key);
@@ -97,22 +94,7 @@ namespace sql2fsbase.Adapters.Impl
                     String q = String.Format(@"delete from {0} where {1} = {2}", Name, DBData.Fields[0],
                         formatSqlField(DBData.Rows[i].Value[0]));
 
-                    UserAction act = IsReplaceAll ? UserAction.Replace : TableRowComparerInstance.CheckRow(DBData.Fields, DBData.Rows[i].Value, null, "Удаление");
-
-                    if (act == UserAction.ReplaceAll)
-                    {
-                        act = UserAction.Replace;
-                        IsReplaceAll = true;
-                    }
-
-                    if (act == UserAction.Replace)
-                    {
-                        sql.Add(q);
-                    }
-                    else if (act == UserAction.Cancel)
-                    {
-                        return;
-                    }
+                    sql.Add(q);
                 }
             }
 
@@ -131,26 +113,7 @@ namespace sql2fsbase.Adapters.Impl
                 }
                 String q = String.Format("insert into {0} ({1}) values ({2})", Name, f, v);
 
-                UserAction act = IsReplaceAll ? UserAction.Replace : TableRowComparerInstance.CheckRow(DBData.Fields, null, row.Value, "Добавление");
-
-                if (act == UserAction.ReplaceAll)
-                {
-                    act = UserAction.Replace;
-                    IsReplaceAll = true;
-                }
-
-                if (act == UserAction.Replace)
-                {
-                    sql.Add(q);
-                }
-                else if (act == UserAction.SkipAll)
-                {
-                    skipAll = true;
-                }
-                else if (act == UserAction.Cancel)
-                {
-                    return;
-                }
+                sql.Add(q);
             }
 
             foreach (var q in sql)

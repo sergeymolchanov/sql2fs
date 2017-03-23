@@ -8,20 +8,18 @@ namespace sql2fsbase.Adapters.Impl
 {
     public class TableContentAdapter : AdapterBaseSQL
     {
-        public TableContentAdapter(ProjectDirectory project, ISqlErrorView sqlErrorView, ITableRowComparer tableRowComparer)
+        public TableContentAdapter(ProjectDirectory project, ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)
         {
-            TableRowComparerInstance = tableRowComparer;
         }
 
         public override void AddItem(string name)
         {
-            Items.Add(new TableContentItem(this, name, Project, Connection, TableRowComparerInstance));
+            Items.Add(new TableContentItem(this, name, Project, Connection));
         }
 
         public override String Postfix { get { return ".xml"; } }
         public override String Prefix { get { return "Content"; } }
-        public ITableRowComparer TableRowComparerInstance { get; private set; }
 
         public override void LoadFromRemote()
         {

@@ -1,6 +1,7 @@
 ﻿using sql2fsbase.Adapters.Impl.DBContent;
 using System;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace sql2fsbase.Adapters.Impl
 {
@@ -11,8 +12,16 @@ namespace sql2fsbase.Adapters.Impl
         public DDLAdapter(ProjectDirectory project, ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)
         {
-            SqlCommand cmdInit = new SqlCommand(INIT_SQL, Connection);
-            cmdInit.ExecuteNonQuery();
+            String _initSqlFile = Common.RootDir.FullName + "\\Hooks\\Database.sql";
+            if (File.Exists(_initSqlFile))
+            {
+                String initSQL = File.ReadAllText(_initSqlFile);
+                foreach(String sql in initSQL.Split(new String[] {"/*SPLIT*/"}, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    SqlCommand cmdInit = new SqlCommand(sql, Connection);
+                    cmdInit.ExecuteNonQuery();
+                }
+            }
         }
         
         public override void AddItem(string name)
@@ -40,100 +49,8 @@ namespace sql2fsbase.Adapters.Impl
         public override String Prefix { get { return "DatabaseDDL"; } }
         public override String Postfix { get { return ".sql"; } }
 
-        // TODO: Common.VersionedObjectTypes
-        private const String INIT_SQL = @"
-IF object_id('DDL_Log') is not null
-	return
-
-create table DDL_Log (
-	RowKey	nvarchar(1000) NOT NULL,
-	EventType nvarchar(100), 
-	PostTime datetime, 
-	OriginalTime datetime, 
-	SPID	int, 
-	LoginName sysname, 
-	ServerName sysname, 
-	DatabaseName	sysname, 
-	SchemaName	sysname, 
-	ObjectName	sysname, 
-	ObjectType	sysname, 
-	CommandText	nvarchar(max),
-	IsOriginal	int not null)
-
-CREATE UNIQUE CLUSTERED INDEX PK_DDL_Log ON DDL_Log(RowKey ASC)
-
-declare @proc nvarchar(max) = '
-create procedure Push_SQL(
-	@originalKey nvarchar(1000),
-	@originalTime datetime,
-	@sql	nvarchar(max))
-as
-begin
-	declare @existsPtr table (ptr nvarchar(1000))
-	declare @newKey	nvarchar(1000)
-
-	insert into @existsPtr
-	select RowKey from DDL_Log
-
-	execute sp_sqlexec @sql
-
-	select @newKey = RowKey from DDL_Log where RowKey not in (select ptr from @existsPtr)
-
-	update DDL_Log set IsOriginal = 0, OriginalTime = @originalTime, RowKey = @originalKey where RowKey = @newKey
-end'
-
-declare @trgsql nvarchar(max) = '
-CREATE TRIGGER TR_DDL_Events
-ON DATABASE
-AFTER DDL_DATABASE_LEVEL_EVENTS
-AS
-BEGIN
-	SET NOCOUNT ON
-	DECLARE @data XML
-	SET @data = EVENTDATA()
-
-	DECLARE @originalTime datetime = @data.value(''(/EVENT_INSTANCE/PostTime)[1]'',''datetime'')
-	DECLARE @eventType sysname = @data.value(''(/EVENT_INSTANCE/EventType)[1]'',''sysname'')
-	DECLARE @objectName sysname = @data.value(''(/EVENT_INSTANCE/ObjectName)[1]'',''sysname'')
-	DECLARE @objectType sysname = @data.value(''(/EVENT_INSTANCE/ObjectType)[1]'',''sysname'')
-	DECLARE	@RowKeyBase		nvarchar(2000) = REPLACE(REPLACE(CONVERT(nvarchar(max),@originalTime,(120)), '' '', ''T''), '':'', ''-'')+''_''+@eventType+''_''+@objectName
-	DECLARE @RowKey			nvarchar(2000)
-	DECLARE @AppendNum  int = 0
-	DECLARE	@commandText nvarchar(max) = @data.value(''(/EVENT_INSTANCE/TSQLCommand/CommandText)[1]'',''nvarchar(max)'')
-
-    if @objectType in (''TRIGGER'', ''PROCEDURE'', ''FUNCTION'', ''VIEW'')
-        return
-
-	if upper(@commandText) like ''ALTER%INDEX%REBUILD%''
-		return
-
-	while(1=1) begin
-		set @RowKey = @RowKeyBase + case when @AppendNum = 0 then '''' else ''_'' + cast(@AppendNum as nvarchar(10)) end
-		if not exists(select 1 from DDL_Log where RowKey = @RowKey)
-			break
-		set @AppendNum = @AppendNum + 1
-	end
-
-	insert into DDL_Log
-		(RowKey, EventType, PostTime, OriginalTime, SPID, LoginName, ServerName, DatabaseName, SchemaName, ObjectName, ObjectType, CommandText, IsOriginal)
-	select
-		RowKey = @RowKey,
-		EventType = @eventType,
-		PostTime = @data.value(''(/EVENT_INSTANCE/PostTime)[1]'',''datetime''),
-		OriginalTime = @originalTime,
-		SPID = @data.value(''(/EVENT_INSTANCE/SPID)[1]'',''int''),
-		LoginName = @data.value(''(/EVENT_INSTANCE/LoginName)[1]'',''sysname''),
-		ServerName = @data.value(''(/EVENT_INSTANCE/ServerName)[1]'',''sysname''),
-		DatabaseName = @data.value(''(/EVENT_INSTANCE/DatabaseName)[1]'',''sysname''),
-		SchemaName = @data.value(''(/EVENT_INSTANCE/SchemaName)[1]'',''sysname''),
-		ObjectName = @objectName,
-		ObjectType = @objectType,
-		CommandText = @commandText,
-		IsOriginal = 1
-END'
-
-execute sp_sqlexec @proc
-execute sp_sqlexec @trgsql
-";
+        private const String SQL_TEMPLATE = @"
+declare @proc nvarchar(max) = '{0}'
+execute sp_sqlexec @proc";
     }
 }

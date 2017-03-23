@@ -18,7 +18,8 @@ namespace sql2fsbase.Adapters.Impl
         
         public override void AddItem(string name)
         {
-           Items.Add(new StoredProcItem(this, name, Project, Connection));
+            if (!IsExcluded(name))
+                Items.Add(new StoredProcItem(this, name, Project, Connection));
         }
 
         public override void LoadFromRemote()
@@ -29,9 +30,12 @@ namespace sql2fsbase.Adapters.Impl
                 while (dr.Read())
                 {
                     String name = dr.GetString(0).Trim() + "." + dr.GetString(1);
-                    StoredProcItem i = new StoredProcItem(this, name, Project, Connection);
-                    i.RemoteModifyDate = dr.GetDateTime(2);
-                    Items.Add(i);                    
+                    if (!IsExcluded(name))
+                    {
+                        StoredProcItem i = new StoredProcItem(this, name, Project, Connection);
+                        i.RemoteModifyDate = dr.GetDateTime(2);
+                        Items.Add(i);
+                    }
                 }
             }
         }

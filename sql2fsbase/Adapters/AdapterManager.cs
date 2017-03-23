@@ -14,13 +14,10 @@ namespace sql2fsbase.Adapters
         public ProjectDirectory Project { get; private set; }
         public List<AdapterBase> Adapters { get; private set; }
 
-        public static ITableRowComparer TableRowComparerInstance { get; set; }
         public static ISqlErrorView SqlErrorViewInstance { get; set; }
 
         public AdapterManager(ProjectDirectory project)
         {
-            if (TableRowComparerInstance == null)
-                throw new NullReferenceException();
             if (SqlErrorViewInstance == null)
                 throw new NullReferenceException();
 
@@ -33,7 +30,7 @@ namespace sql2fsbase.Adapters
             if (Project.Settings.ConnectionString != null && Project.Settings.ConnectionString.Length > 5)
             {
                 Adapters.Add(new DDLAdapter(project, SqlErrorViewInstance));
-                Adapters.Add(new TableContentAdapter(project, SqlErrorViewInstance, TableRowComparerInstance));
+                Adapters.Add(new TableContentAdapter(project, SqlErrorViewInstance));
                 Adapters.Add(new StoredProcAdapter(project, SqlErrorViewInstance));
             }
 

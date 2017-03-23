@@ -47,8 +47,6 @@
     <Compile Include="Adapters\Impl\DBContent\ISqlErrorView.cs" />
     <Compile Include="Adapters\Impl\DBContent\TableData.cs" />
     <Compile Include="Adapters\Impl\DBContent\TableRow.cs" />
-    <Compile Include="Adapters\Impl\DBContent\ITableRowComparer.cs" />
-    <Compile Include="Adapters\Impl\DBContent\UserAction.cs" />
     <Compile Include="Adapters\Impl\DDLAdapter.cs" />
     <Compile Include="Adapters\Impl\DDLItem.cs" />
     <Compile Include="Adapters\Impl\ReportAdapter.cs" />

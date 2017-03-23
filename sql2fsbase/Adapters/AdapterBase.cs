@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace sql2fsbase.Adapters
 {
@@ -21,6 +22,59 @@ namespace sql2fsbase.Adapters
         public abstract String Prefix { get; }
         public virtual String Postfix { get { return ""; } }
         public abstract void LoadFromRemote();
+
+        private List<Regex> excludeObjects = null;
+        private List<Regex> includeObjects = null;
+
+        private Regex getRegex(String line)
+        {
+            return new Regex(line.Replace("*", ".*"), RegexOptions.IgnoreCase);
+        }
+        private void loadExceptions()
+        {
+            if (excludeObjects != null)
+                return;
+
+            excludeObjects = new List<Regex>();
+            includeObjects = new List<Regex>();
+
+            if (File.Exists(DataPath + @"\.exclude.conf"))
+            {
+                using (StreamReader sr = new StreamReader(DataPath + @"\.exclude.conf"))
+                {
+                    String line = null;
+                    while ((line = sr.ReadLine()) != null)
+                        if (line.Replace(" ", "").Length > 0)
+                            excludeObjects.Add(getRegex(line.Replace(" ", "")));
+                }
+            }
+
+            if (File.Exists(DataPath + @"\.include.conf"))
+            {
+                using (StreamReader sr = new StreamReader(DataPath + @"\.include.conf"))
+                {
+                    String line = null;
+                    while ((line = sr.ReadLine()) != null)
+                        if (line.Replace(" ", "").Length > 0)
+                            includeObjects.Add(getRegex(line.Replace(" ", "")));
+                }
+            }
+        }
+
+        public bool IsExcluded(String line)
+        {
+            loadExceptions();
+
+            foreach (Regex reg in includeObjects)
+                if (reg.IsMatch(line))
+                    return false;
+
+            foreach (Regex reg in excludeObjects)
+                if (reg.IsMatch(line))
+                    return true;
+
+            return false;
+        }
 
         private void LoadFromLocal(String basePath, String path)
         {
