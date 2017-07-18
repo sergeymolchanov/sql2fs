@@ -1,5 +1,4 @@
-﻿using sql2fsbase.Adapters.Impl.DBContent;
-using System;
+﻿using System;
 using System.Data.SqlClient;
 
 namespace sql2fsbase.Adapters.Impl
@@ -11,7 +10,7 @@ namespace sql2fsbase.Adapters.Impl
  where type in ('FN', 'IF', 'P', 'TF', 'TR', 'V')
  order by type, name";
 
-        public StoredProcAdapter(ProjectDirectory project, ISqlErrorView sqlErrorView)
+        public StoredProcAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)
         {
         }

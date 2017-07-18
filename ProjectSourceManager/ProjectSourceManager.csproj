@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestClass.cs" />
     <EmbeddedResource Include="AdapterView\SQLErrorView.resx">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
     </EmbeddedResource>

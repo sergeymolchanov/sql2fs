@@ -1,5 +1,4 @@
-﻿using sql2fsbase.Adapters.Impl.DBContent;
-using System;
+﻿using System;
 using System.Data.SqlClient;
 using System.IO;
 
@@ -9,7 +8,7 @@ namespace sql2fsbase.Adapters.Impl
     {
         private const String QueryString = @"select RowKey, OriginalTime, CommandText from DDL_Log where IsOriginal = 1";
 
-        public DDLAdapter(ProjectDirectory project, ISqlErrorView sqlErrorView)
+        public DDLAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)
         {
             String _initSqlFile = Common.RootDir.FullName + "\\Hooks\\Database.sql";

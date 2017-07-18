@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using sql2fsbase.Adapters.Impl;
-using sql2fsbase.Adapters.Impl.DBContent;
 
 namespace sql2fsbase.Adapters
 {
@@ -14,7 +13,7 @@ namespace sql2fsbase.Adapters
         public ProjectDirectory Project { get; private set; }
         public List<AdapterBase> Adapters { get; private set; }
 
-        public static ISqlErrorView SqlErrorViewInstance { get; set; }
+        public static TableContent.ISqlErrorView SqlErrorViewInstance { get; set; }
 
         public AdapterManager(ProjectDirectory project)
         {
@@ -24,15 +23,15 @@ namespace sql2fsbase.Adapters
             Project = project;
             Adapters = new List<AdapterBase>();
 
-            if (Project.Settings.ReportServerURL != null && Project.Settings.ReportServerURL.Length > 5)
-                Adapters.Add(new ReportAdapter(project));
-
             if (Project.Settings.ConnectionString != null && Project.Settings.ConnectionString.Length > 5)
             {
-                Adapters.Add(new DDLAdapter(project, SqlErrorViewInstance));
                 Adapters.Add(new TableContentAdapter(project, SqlErrorViewInstance));
+                Adapters.Add(new DDLAdapter(project, SqlErrorViewInstance));
                 Adapters.Add(new StoredProcAdapter(project, SqlErrorViewInstance));
             }
+
+            if (Project.Settings.ReportServerURL != null && Project.Settings.ReportServerURL.Length > 5)
+                Adapters.Add(new ReportAdapter(project));
 
             if (Project.Settings.VorlagenDir != null && Project.Settings.VorlagenDir.Length > 2)
             {

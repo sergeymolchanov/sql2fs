@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using sql2fsbase.Exceptions;
+using sql2fsbase.Adapters.Impl;
 
 namespace sql2fsbase.Adapters
 {

@@ -9,11 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ProjectSourceManager.Adapters.Impl;
 using sql2fsbase.Adapters.Impl;
-using sql2fsbase.Adapters.Impl.DBContent;
 
 namespace ProjectSourceManager.Adapters.Impl.DBContent
 {
-    public partial class SQLErrorView : Form, ISqlErrorView
+    public partial class SQLErrorView : Form, TableContent.ISqlErrorView
     {
         public SQLErrorView()
         {

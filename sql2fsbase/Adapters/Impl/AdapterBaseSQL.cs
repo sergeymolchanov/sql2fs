@@ -1,5 +1,4 @@
-﻿using sql2fsbase.Adapters.Impl.DBContent;
-using sql2fsbase.Exceptions;
+﻿using sql2fsbase.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,13 +10,13 @@ namespace sql2fsbase.Adapters.Impl
 {
     public abstract class AdapterBaseSQL : AdapterBase
     {
-        public AdapterBaseSQL(ProjectDirectory project, ISqlErrorView sqlErrorView)
+        public AdapterBaseSQL(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
             : base(project)
         {
             SqlErrorViewInstance = sqlErrorView;
         }
 
-        private ISqlErrorView SqlErrorViewInstance;
+        private TableContent.ISqlErrorView SqlErrorViewInstance;
 
         private SqlConnection _connection = null;
         protected SqlConnection Connection

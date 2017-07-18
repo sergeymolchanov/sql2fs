@@ -7,7 +7,6 @@ using sql2fsbase.Exceptions;
 using System.IO;
 using sql2fsbase;
 using ProjectSourceManager.Adapters.Impl.DBContent;
-using sql2fsbase.Adapters.Impl.DBContent;
 
 namespace ProjectSourceManager
 {
