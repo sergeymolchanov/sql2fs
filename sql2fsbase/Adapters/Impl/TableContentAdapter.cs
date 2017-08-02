@@ -10,7 +10,7 @@ namespace sql2fsbase.Adapters.Impl
 {
     public class TableContentAdapter : AdapterBaseSQL
     {
-        private TableContent.TableConfig[] Config;
+        private TableContent.TableConfig[] Config = new TableContent.TableConfig[0];
 
         public TableContentAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)

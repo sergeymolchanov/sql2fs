@@ -15,6 +15,8 @@ namespace sql2fsbase
     {
         static readonly MD5 md5 = System.Security.Cryptography.MD5.Create();
 
+        public static readonly String GitProc = "TortoiseGitProc.exe";
+
         public static readonly DirectoryInfo RootDir = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
         public static readonly String VersionedObjectTypes = "'FN', 'IF', 'P', 'TF', 'TR', 'V'";
 
@@ -157,6 +159,43 @@ namespace sql2fsbase
             public override System.Text.Encoding Encoding
             {
                 get { return encoding; }
+            }
+        }
+
+        public static byte[] LoadFile(String name)
+        {
+            if (!File.Exists(name))
+                return null;
+
+            return File.ReadAllBytes(name);
+        }
+
+        public static void StoreFile(String name, byte[] data)
+        {
+            if (data == null)
+            {
+                File.Delete(name);
+            }
+            else
+            {
+                String subPath = "";
+                String[] pathElements = name.Replace("/", "\\").Split('\\');
+                for (int i = 0; i < pathElements.Length - 1; i++)
+                {
+                    String subdir = pathElements[i];
+
+                    if (subdir.Length == 0)
+                        continue;
+
+                    if (subPath == "")
+                        subPath = subdir;
+                    else
+                        subPath += "\\" + subdir;
+                    if (!Directory.Exists(subPath))
+                        Directory.CreateDirectory(subPath);
+                }
+
+                File.WriteAllBytes(name, data);
             }
         }
     }

@@ -21,6 +21,7 @@ namespace sql2fsbase
             Application.SetCompatibleTextRenderingDefault(false);
 
             AdapterManager.SqlErrorViewInstance = new SQLErrorView();
+            AdapterManager.DiffTool = new DiffTool();
 
             Application.Run(new ProjectListForm());
         }

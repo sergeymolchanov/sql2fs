@@ -83,7 +83,7 @@ namespace sql2fsbase.Adapters
             foreach (var fi in dir.GetFiles())
             {
                 String iname = fi.Name;
-                if (iname.EndsWith(".md5") || iname.EndsWith(".date"))
+                if (iname.EndsWith(".md5") || iname.EndsWith(".date") || iname.EndsWith(".base"))
                     continue;
                 if (!iname.EndsWith(Postfix))
                     continue;
@@ -130,45 +130,10 @@ namespace sql2fsbase.Adapters
                 Directory.CreateDirectory(path);
         }
 
-        public void Dump(bool force)
-        {
-            checkTargetDir();
-
-            LongOperationState.Timer1Pos = 0;
-            LongOperationState.Timer1Max = Items.Count;
-
-            foreach (var item in Items)
-            {
-                item.Dump();
-
-                LongOperationState.Timer1Pos++;
-                LongOperationState.Timer1Text = item.Name;
-            }
-        }
-
-        public void Restore(bool force)
-        {
-            checkTargetDir();
-            clearErrors();
-
-            LongOperationState.Timer1Pos = 0;
-            LongOperationState.Timer1Max = Items.Count;
-
-            DoSort();
-
-            foreach (var item in Items)
-            {
-                LongOperationState.Timer1Pos++;
-                LongOperationState.Timer1Text = item.Name;
-
-                item.Restore(false, force);
-            }
-
-            processErrors();
-        }
-
         public void Merge()
         {
+            OnBeforeSync();
+
             checkTargetDir();
             clearErrors();
 
@@ -185,23 +150,9 @@ namespace sql2fsbase.Adapters
                 item.Merge();
             }
 
+            OnAfterSync();
+
             processErrors();
-        }
-
-        public void Check()
-        {
-            checkTargetDir();
-
-            LongOperationState.Timer1Pos = 0;
-            LongOperationState.Timer1Max = Items.Count;
-
-            foreach (var item in Items)
-            {
-                LongOperationState.Timer1Pos++;
-                LongOperationState.Timer1Text = item.Name;
-
-                item.Restore(true, false);
-            }
         }
 
         protected virtual void processErrors()
@@ -213,6 +164,13 @@ namespace sql2fsbase.Adapters
         }
 
         protected virtual void DoSort()
+        {
+        }
+
+        public virtual void OnBeforeSync()
+        {
+        }
+        public virtual void OnAfterSync()
         {
         }
     }

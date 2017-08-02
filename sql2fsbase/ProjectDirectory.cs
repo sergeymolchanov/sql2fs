@@ -91,46 +91,25 @@ namespace sql2fsbase
             RunTortoiseGitCommand("fetch");
         }
 
+        public bool ExistsFile(String prefix, String name)
+        {
+            String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
+
+            return File.Exists(_file);
+        }
 
         public void StoreFile(String prefix, String name, byte[] data)
         {
-            if (data == null)
-            {
-                File.Delete(String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name));
-            }
-            else
-            {
-                String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
+            String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
 
-                String subPath = "";
-                String[] pathElements = _file.Replace("/", "\\").Split('\\');
-                for (int i = 0; i < pathElements.Length - 1; i++)
-                {
-                    String subdir = pathElements[i];
-
-                    if (subdir.Length == 0)
-                        continue;
-
-                    if (subPath == "")
-                        subPath = subdir;
-                    else
-                        subPath += "\\" + subdir;
-                    if (!Directory.Exists(subPath))
-                        Directory.CreateDirectory(subPath);
-                }
-
-                File.WriteAllBytes(_file, data);
-            }
+            Common.StoreFile(_file, data);
         }
 
         public byte[] LoadFile(String prefix, String name)
         {
             String _file = String.Format(@"{0}\{1}\{2}", Dir.FullName, prefix, name);
 
-            if (!File.Exists(_file))
-                return null;
-
-            return File.ReadAllBytes(_file);
+            return Common.LoadFile(_file);
         }
 
         public void DeleteFile(String prefix, String name)
@@ -182,13 +161,12 @@ namespace sql2fsbase
         {
             Common.Out("Execute " + cmd);
             String dest = Dir.FullName;
-            String gitProc = String.Format(@"TortoiseGitProc.exe", Common.RootDir.FullName);
             String fullCmd = String.Format(@"/command:{0} /path:{1}", cmd, Dir.FullName);
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
             p.StartInfo.WorkingDirectory = dest;
-            p.StartInfo.FileName = gitProc;
+            p.StartInfo.FileName = Common.GitProc;
             p.StartInfo.Arguments = fullCmd;
             p.Start();
 

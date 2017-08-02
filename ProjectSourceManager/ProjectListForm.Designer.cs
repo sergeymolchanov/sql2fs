@@ -208,9 +208,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Проект";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ProjectListForm_FormClosing);
-            this.Load += new System.EventHandler(this.ProjectListForm_Load);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ProjectListForm_KeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ProjectListForm_KeyPress);
             this.grRepoControls.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace sql2fsbase.Adapters.Impl
 {
@@ -41,5 +42,36 @@ namespace sql2fsbase.Adapters.Impl
 
         public override String Prefix { get { return "DatabaseProg"; } }
         public override String Postfix { get { return ".sql"; } }
+
+        public override void OnAfterSync()
+        {
+            runScripts("AfterSyncObjects");
+        }
+
+        public override void OnBeforeSync()
+        {
+            runScripts("BeforeSyncObjects");
+        }
+
+        private void runScripts(String type)
+        {
+            DirectoryInfo[] databaseRunDirs = Project.Dir.GetDirectories("DatabaseRun");
+
+            if (databaseRunDirs.Length == 0)
+                return;
+
+            DirectoryInfo[] scriptDir = databaseRunDirs[0].GetDirectories(type);
+
+            if (scriptDir.Length == 0)
+                return;
+
+            foreach (FileInfo fi in scriptDir[0].GetFiles("*.sql"))
+            {
+                using (StreamReader r = fi.OpenText())
+                {
+                    new SqlCommand(r.ReadToEnd(), Connection).ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

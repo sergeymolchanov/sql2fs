@@ -53,6 +53,7 @@
     <Compile Include="AdapterView\SQLErrorView.Designer.cs">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
     </Compile>
+    <Compile Include="DiffTool.cs" />
     <Compile Include="ProjectEditor.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -14,6 +14,7 @@ namespace sql2fsbase.Adapters
         public List<AdapterBase> Adapters { get; private set; }
 
         public static TableContent.ISqlErrorView SqlErrorViewInstance { get; set; }
+        public static IDiffTool DiffTool { get; set; }
 
         public AdapterManager(ProjectDirectory project)
         {

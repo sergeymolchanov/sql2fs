@@ -103,33 +103,10 @@ namespace ProjectSourceManager
             dir.Log();
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-        }
-
-        private void ProjectListForm_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void lbDir_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         private void ProjectListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-        }
-
-        private void ProjectListForm_KeyPress(object sender, KeyPressEventArgs e)
-        {
-        }
-
-        private void ProjectListForm_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void cbExpert_CheckedChanged(object sender, EventArgs e)
-        {
+            if (_thread != null && _thread.ThreadState == ThreadState.Running)
+                _thread.Abort();
         }
 
         private void btn_config_Click(object sender, EventArgs e)
@@ -152,13 +129,20 @@ namespace ProjectSourceManager
         {
             if (onTimer) return;
             onTimer = true;
-            bool isThreadRunning = _thread != null && _thread.ThreadState == ThreadState.Running;
+            bool isThreadRunning = _thread != null && (_thread.ThreadState == ThreadState.Running || _thread.ThreadState == ThreadState.WaitSleepJoin);
+
+            if (btnMergeProj.Enabled == isThreadRunning)
+                btnMergeProj.Enabled = !isThreadRunning;
             
             if (_threadException != null)
             {
                 if (_threadException is ObjectChangedException)
                 {
-                    MessageBox.Show(String.Format(@"Состояние сервера изменилось, необходимо заново выполнить дамп. Объект {0}", ((ObjectChangedException)_threadException).Item.Name));
+                    String itemName = ((ObjectChangedException)_threadException).Item.Name;
+                    LongOperationState.Timer1Text = "Ошибка";                    
+                    LongOperationState.Timer2Text = itemName;
+                    
+                    MessageBox.Show(String.Format(@"Объект '{0}' изменился и в БД, и в репозитарии. Необходимо разрешить конфликт.", itemName));
                 }
                 else
                 {
