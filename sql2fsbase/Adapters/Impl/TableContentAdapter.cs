@@ -14,7 +14,28 @@ namespace sql2fsbase.Adapters.Impl
 
         public TableContentAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
             : base(project, sqlErrorView)
-        {/*
+        {
+            byte[] fileData = Project.LoadFile(Prefix, "tables.xml");
+
+            if (fileData == null)
+            {
+                BuildTablesXml();
+
+                fileData = Project.LoadFile(Prefix, "tables.xml");
+
+                if (fileData == null)
+                    return;
+            }
+
+            String tableList = Encoding.GetEncoding(1251).GetString(fileData);
+
+            Config = Common.Deserialize<TableContent.ContentConfig>(tableList).Tables;
+        }
+
+        private void BuildTablesXml()
+        {
+            // Использует старый tables.conf для создания tables.xml
+
             byte[] fileData = Project.LoadFile(Prefix, "tables.conf");
 
             if (fileData == null)
@@ -58,76 +79,12 @@ namespace sql2fsbase.Adapters.Impl
                     SplitCond = name == "_localstr" ? "prog" : ""
                 });
             }
+
             TableContent.ContentConfig cc = new TableContent.ContentConfig() { Tables = _conf.ToArray() };
+            String serializedConfig = Common.Serialize<TableContent.ContentConfig>(cc);
 
-            cc.Tables[0].SubTables = new TableContent.SubTableConfig[] {
-                new TableContent.SubTableConfig()
-            {
-                Name = "test"
-            }};
-            String ttt = Common.Serialize<TableContent.ContentConfig>(cc);
-
-            Project.StoreFile(Prefix, "tables.xml", Encoding.GetEncoding(1251).GetBytes(ttt));
-            */
-            byte[] fileData = Project.LoadFile(Prefix, "tables.xml");
-
-            if (fileData == null)
-                return;
-
-            String tableList = Encoding.GetEncoding(1251).GetString(fileData);
-
-            Config = Common.Deserialize<TableContent.ContentConfig>(tableList).Tables;
+            Project.StoreFile(Prefix, "tables.xml", Encoding.GetEncoding(1251).GetBytes(serializedConfig));
         }
-
-        /* init from tables.conf
-         * 
-            byte[] fileData = Project.LoadFile(Prefix, "tables.conf");
-
-            if (fileData == null)
-                return;
-
-            String tableList = Encoding.GetEncoding(1251).GetString(fileData);
-
-            List<TableContent.TableConfig> _conf = new List<TableContent.TableConfig>();
-
-            foreach (String line in tableList.Split('\n'))
-            {
-                String name;
-
-                List<String> fields = new List<string>();
-                List<String> fieldsInsertOnly = new List<string>();
-
-                if (line.Length < 5)
-                    continue;
-
-                String[] t = line.Replace("\r", "").Split(':');
-                name = t[0];
-
-                String pk = null;
-
-                foreach (String f in t[1].Split(','))
-                {
-                    if (pk == null)
-                        pk = f.Trim();
-                    else if (f.Trim().StartsWith("+"))
-                        fieldsInsertOnly.Add(f.Trim());
-                    else
-                        fields.Add(f.Trim());
-                }
-
-                _conf.Add(new TableContent.TableConfig()
-            {
-                Name = name,
-                PrimaryKey = pk,
-                Fields = fields.ToArray(),
-                FieldsInsertOnly = fieldsInsertOnly.ToArray(),
-                SplitCond = name == "_localstr" ? "prog" : ""
-            });
-            }
-            TableContent.ContentConfig cc = new TableContent.ContentConfig() { Tables = _conf.ToArray() };
-            String ttt = Common.Serialize<TableContent.ContentConfig>(cc);
-
-            Project.StoreFile(Prefix, "tables.xml", Encoding.GetEncoding(1251).GetBytes(ttt));*/
 
         public override void AddItem(string name)
         {
