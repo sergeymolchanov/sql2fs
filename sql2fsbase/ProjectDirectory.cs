@@ -23,50 +23,12 @@ namespace sql2fsbase
             Settings = ProjectSettings.Load(dir);
         }
 
-        public void Dump(bool force)
+        public void Merge()
         {
-            Common.Out("Dump '{0}'{1}", Name, force ? " with FORCE" : "");
-
-            String actualCommitId = GetActualCommitId();
-            byte[] validCommitBytes = this.LoadFile("", VALID_COMMIT_FILE);
-            if (!force && actualCommitId != "" && validCommitBytes != null)
-            {
-                String validCommitId = Encoding.ASCII.GetString(validCommitBytes);
-
-                if (!validCommitId.Equals(actualCommitId))
-                    throw new Exception(
-                        "Переключение на разработку БД произошло с другой версии репозитария. Для переключения обратно необходимо откатиться на коммит " +
-                        validCommitId + " Иначе можно затереть изменения в репозитарии.");
-            }
+            Common.Out("Merge '{0}'", Name);
 
             AdapterManager manager = new AdapterManager(this);
-            manager.Dump(force);
-
-            IsRepoLocked = false;
-        }
-
-        public void Restore(bool force)
-        {
-            Common.Out("Restore '{0}'{1}", Name, force ? " with FORCE" : "");
-
-            String actualCommitId = GetActualCommitId();
-            this.StoreFile("", VALID_COMMIT_FILE, Encoding.ASCII.GetBytes(actualCommitId));
-
-            AdapterManager manager = new AdapterManager(this);
-            manager.Restore(force);
-
-            IsRepoLocked = true;
-        }
-
-        public void Merge(bool onlyCheck)
-        {
-            if (onlyCheck)
-                Common.Out("Check '{0}'", Name);
-            else
-                Common.Out("Merge '{0}'", Name);
-
-            AdapterManager manager = new AdapterManager(this);
-            manager.Merge(onlyCheck);
+            manager.Merge();
         }
 
         public bool IsRepoLocked
@@ -124,9 +86,9 @@ namespace sql2fsbase
             RunTortoiseGitCommand("log");
         }
 
-        public void Switch()
+        public void Fetch()
         {
-            RunTortoiseGitCommand("switch");
+            RunTortoiseGitCommand("fetch");
         }
 
 

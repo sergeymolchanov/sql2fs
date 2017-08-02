@@ -41,10 +41,5 @@ namespace ProjectSourceManager.Adapters.Impl.DBContent
             doCancel = true;
             Close();
         }
-
-        private void btnExecute_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

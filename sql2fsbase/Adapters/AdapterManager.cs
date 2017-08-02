@@ -51,7 +51,7 @@ namespace sql2fsbase.Adapters
             }
         }
 
-        public void Merge(bool onlyCheck)
+        public void Merge()
         {
             LongOperationState.Timer2Pos = 0;
             LongOperationState.Timer2Max = Adapters.Count;
@@ -59,45 +59,14 @@ namespace sql2fsbase.Adapters
             foreach (var item in Adapters)
             {
                 LongOperationState.Timer2Text = "Загрузка " + item.Prefix;
-                item.Merge(onlyCheck);
-                LongOperationState.Timer2Pos++;
-            }
-        }
-
-        public void Dump(bool force)
-        {
-            LongOperationState.Timer2Pos = 0;
-            LongOperationState.Timer2Max = Adapters.Count;
-
-            foreach (var item in Adapters)
-            {
-                LongOperationState.Timer2Text = "Загрузка " + item.Prefix;
-                item.Dump(force);
-                LongOperationState.Timer2Pos++;
-            }
-        }
-
-        public void Restore(bool force)
-        {
-            LongOperationState.Timer2Pos = 0;
-            LongOperationState.Timer2Max = Adapters.Count * 2;
-
-            foreach (var item in Adapters)
-            {
-                LongOperationState.Timer2Text = "Проверка " + item.Prefix;
-                if (!force)
-                {
-                    item.Check();
-                }
+                item.Merge();
                 LongOperationState.Timer2Pos++;
             }
 
-            foreach (var item in Adapters)
-            {
-                LongOperationState.Timer2Text = "Обновление " + item.Prefix;
-                item.Restore(force);
-                LongOperationState.Timer2Pos++;
-            }
+            LongOperationState.Timer1Text = "Завершено";
+            LongOperationState.Timer2Text = "";
+            LongOperationState.Timer1Pos = LongOperationState.Timer1Max;
+            LongOperationState.Timer2Pos = LongOperationState.Timer2Max;
         }
     }
 }

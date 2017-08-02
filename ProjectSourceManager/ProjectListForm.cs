@@ -29,8 +29,6 @@ namespace ProjectSourceManager
         {            
             ProjectEditor editForm = new ProjectEditor();
             editForm.ShowProject(dir);
-
-            reloadControls();
         }
 
         private AdapterManager BuildAdapterManager(ProjectDirectory dir)
@@ -38,37 +36,13 @@ namespace ProjectSourceManager
             return new AdapterManager(dir);
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            DoThreadedAction(dir, ThreadedAction.Dump);
-
-            reloadControls();
-        }
-
-        private void btnRestore_Click(object sender, EventArgs e)
-        {
-            DoThreadedAction(dir, ThreadedAction.Restore);
-
-            reloadControls();
-        }
-
         private static ProjectDirectory _project;
-        private static ThreadedAction _threadAction;
         private static Exception _threadException = null;
         private static Thread _thread = null;
 
-        enum ThreadedAction
-        {
-            Dump,
-            Restore,
-            Merge,
-            Check
-        }
-
-        private void DoThreadedAction(ProjectDirectory project, ThreadedAction action)
+        private void DoThreadedAction(ProjectDirectory project)
         {
             _project = project;
-            _threadAction = action;
 
             if (cbOtherThread.Checked)
             {
@@ -80,9 +54,6 @@ namespace ProjectSourceManager
             {
                 DoAction();
             }
-
-            timer1_Tick(null, null);
-            reloadControls();
         }
 
         private void DoAction()
@@ -91,22 +62,7 @@ namespace ProjectSourceManager
             {
                 try
                 {
-                    if (_threadAction == ThreadedAction.Dump)
-                    {
-                        _project.Dump(cbForce.Checked);
-                    }
-                    else if (_threadAction == ThreadedAction.Restore)
-                    {
-                        _project.Restore(cbForce.Checked);
-                    }
-                    else if (_threadAction == ThreadedAction.Merge)
-                    {
-                        _project.Merge(false);
-                    }
-                    else if (_threadAction == ThreadedAction.Check)
-                    {
-                        _project.Merge(true);
-                    }
+                    _project.Merge();
                 }
                 catch (Exception exception)
                 {
@@ -117,28 +73,10 @@ namespace ProjectSourceManager
             }
             else
             {
-                if (_threadAction == ThreadedAction.Dump)
-                {
-                    _project.Dump(cbForce.Checked);
-                }
-                else if (_threadAction == ThreadedAction.Restore)
-                {
-                    _project.Restore(cbForce.Checked);
-                }
-                else if (_threadAction == ThreadedAction.Merge)
-                {
-                    _project.Merge(false);
-                }
-                else if (_threadAction == ThreadedAction.Check)
-                {
-                    _project.Merge(true);
-                }
+                _project.Merge();
             }
 
-            needReloadControls = true;
         }
-
-        private bool needReloadControls = false;
 
         private void btn_commit_Click(object sender, EventArgs e)
         {
@@ -165,63 +103,20 @@ namespace ProjectSourceManager
             dir.Log();
         }
 
-        private bool onTimer = false;
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (onTimer) return;
-            onTimer = true;
-            bool isThreadRunning = _thread != null && _thread.ThreadState == ThreadState.Running;
-            btnDump.Enabled = cbExpert.Checked && !isThreadRunning;
-            btnRestore.Enabled = cbExpert.Checked && !isThreadRunning;
-
-            ProgressBarForm.Instance.Visible = isThreadRunning;
-
-            if (_threadException != null)
-            {
-                if (_threadException is ObjectChangedException)
-                {
-                    MessageBox.Show(String.Format(@"Состояние сервера изменилось, необходимо заново выполнить дамп. Объект {0}", ((ObjectChangedException)_threadException).Item.Name));
-                }
-                else
-                {
-                    MessageBox.Show(_threadException.Message);
-                }
-                _threadException = null;
-            }
-
-            onTimer = false;
-
-            if (needReloadControls)
-            {
-                needReloadControls = false;
-                reloadControls();
-            }
         }
 
         private void ProjectListForm_Load(object sender, EventArgs e)
         {
-            reloadControls();
         }
 
         private void lbDir_SelectedIndexChanged(object sender, EventArgs e)
         {
-            reloadControls();
         }
 
         private void ProjectListForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-        }
-
-        private void reloadControls()
-        {
-            cbForce.Enabled = cbExpert.Checked;
-            if (!cbForce.Enabled && cbForce.Checked)
-                cbForce.Checked = false;
-        }
-
-        private void btnSwitch_Click(object sender, EventArgs e)
-        {
-            dir.Switch();
         }
 
         private void ProjectListForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -235,26 +130,57 @@ namespace ProjectSourceManager
 
         private void cbExpert_CheckedChanged(object sender, EventArgs e)
         {
-            reloadControls();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DoThreadedAction(dir, ThreadedAction.Merge);
-
-            reloadControls();
-        }
-
-        private void button1_Click_2(object sender, EventArgs e)
-        {
-            DoThreadedAction(dir, ThreadedAction.Check);
-
-            reloadControls();
         }
 
         private void btn_config_Click(object sender, EventArgs e)
         {
             new ProjectEditor().ShowProject(dir);
+        }
+
+        private void btnMergeProj_Click(object sender, EventArgs e)
+        {
+            DoThreadedAction(dir);
+        }
+
+        private void btnFetch_Click(object sender, EventArgs e)
+        {
+            dir.Fetch();
+        }
+
+        private bool onTimer = false;
+        private void progressBarTimer_Tick(object sender, EventArgs e)
+        {
+            if (onTimer) return;
+            onTimer = true;
+            bool isThreadRunning = _thread != null && _thread.ThreadState == ThreadState.Running;
+            
+            if (_threadException != null)
+            {
+                if (_threadException is ObjectChangedException)
+                {
+                    MessageBox.Show(String.Format(@"Состояние сервера изменилось, необходимо заново выполнить дамп. Объект {0}", ((ObjectChangedException)_threadException).Item.Name));
+                }
+                else
+                {
+                    MessageBox.Show(_threadException.Message);
+                }
+                _threadException = null;
+            }
+
+            if (LongOperationState.Timer1Max >= LongOperationState.Timer1Pos || LongOperationState.Timer2Max >= LongOperationState.Timer2Pos)
+            {
+                progressBar1.Maximum = LongOperationState.Timer1Max;
+                progressBar1.Minimum = 0;
+                progressBar1.Value = LongOperationState.Timer1Pos;
+                label1.Text = LongOperationState.Timer1Text;
+
+                progressBar2.Maximum = LongOperationState.Timer2Max;
+                progressBar2.Minimum = 0;
+                progressBar2.Value = LongOperationState.Timer2Pos;
+                label2.Text = LongOperationState.Timer2Text;
+            }
+
+            onTimer = false;
         }
     }
 }

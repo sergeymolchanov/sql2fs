@@ -167,7 +167,7 @@ namespace sql2fsbase.Adapters
             processErrors();
         }
 
-        public void Merge(bool onlyCheck)
+        public void Merge()
         {
             checkTargetDir();
             clearErrors();
@@ -182,7 +182,7 @@ namespace sql2fsbase.Adapters
                 LongOperationState.Timer1Pos++;
                 LongOperationState.Timer1Text = item.Name;
 
-                item.Merge(onlyCheck);
+                item.Merge();
             }
 
             processErrors();

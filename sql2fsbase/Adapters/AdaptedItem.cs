@@ -33,7 +33,7 @@ namespace sql2fsbase.Adapters
             return new List<string>();
         }
 
-        public void Merge(bool onlyCheck)
+        public void Merge()
         {
             DateTime? remoteModifyDate = RemoteModifyDate;
             if (remoteModifyDate != null)
@@ -59,14 +59,6 @@ namespace sql2fsbase.Adapters
                 Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5", remoteHash);
                 changedLocal = false;
                 changedRemote = false;
-            }
-
-            if (onlyCheck)
-            {
-                if (changedLocal || changedRemote)
-                    throw new ObjectChangedException(this);
-                else
-                    return;
             }
             
             if (changedLocal && changedRemote)
