@@ -35,18 +35,23 @@ namespace sql2fsbase.Adapters.Impl
 
         public override void Push(byte[] data)
         {
-            if (this.IsExistsRemote)
-                return;
+            if (this.IsExistsRemote && !this.IsExistsLocal)
+            {
+                SqlCommand cmd = new SqlCommand(String.Format("delete from ddl_log where RowKey = '{0}'", this.Name), Connection);
+                cmd.ExecuteNonQuery();
+            }
+            else if (!this.IsExistsRemote && this.IsExistsLocal)
+            {
+                String dataStr = Common.ConvertFrom(data, _enc);
 
-            String dataStr = Common.ConvertFrom(data, _enc);
-
-            SqlCommand cmd = new SqlCommand("Push_SQL", Connection);
-            cmd.CommandTimeout = 6000;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@originalKey", Name);
-            cmd.Parameters.AddWithValue("@originalTime", ActionDateTime);
-            cmd.Parameters.AddWithValue("@sql", dataStr);
-            cmd.ExecuteNonQuery();
+                SqlCommand cmd = new SqlCommand("Push_SQL", Connection);
+                cmd.CommandTimeout = Int32.MaxValue;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@originalKey", Name);
+                cmd.Parameters.AddWithValue("@originalTime", ActionDateTime);
+                cmd.Parameters.AddWithValue("@sql", dataStr);
+                cmd.ExecuteNonQuery();
+            }
         }
 
         public override byte[] Pull()
