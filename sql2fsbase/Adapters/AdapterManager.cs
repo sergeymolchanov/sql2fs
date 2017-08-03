@@ -28,7 +28,10 @@ namespace sql2fsbase.Adapters
             }
 
             if (Project.Settings.ReportServerURL != null && Project.Settings.ReportServerURL.Length > 5)
+            {
+                Adapters.Add(new ReportDatasourceAdapter(project));
                 Adapters.Add(new ReportAdapter(project));
+            }
 
             if (Project.Settings.VorlagenDir != null && Project.Settings.VorlagenDir.Length > 2)
             {

@@ -22,8 +22,16 @@ namespace sql2fsbase.Adapters.Impl
             foreach (var item in rs.ListChildren("/" + Project.Settings.ReportRoot, true))
             {
                 if (item.TypeName == "Report")
-                {                    
+                {
                     String name = item.Path;
+                    if (name.StartsWith("/"))
+                        name = name.Substring(1);
+                    if (Project.Settings.ReportRoot.Length > 0)
+                    {
+                        if (!name.ToLower().StartsWith(Project.Settings.ReportRoot.ToLower()))
+                            throw new Exception("Объект " + name + " должен начинаться с " + Project.Settings.ReportRoot);
+                        name = name.Substring(Project.Settings.ReportRoot.Length);
+                    }
                     if (name.StartsWith("/"))
                         name = name.Substring(1);
                     ReportItem i = new ReportItem(this, name, Project, rs);

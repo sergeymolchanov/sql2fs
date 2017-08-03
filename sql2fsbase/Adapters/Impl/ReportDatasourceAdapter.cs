@@ -22,22 +22,29 @@ namespace sql2fsbase.Adapters.Impl
         {
             foreach (var item in rs.ListChildren("/" + Project.Settings.ReportRoot, true))
             {
-                if (item.TypeName != "Report")
+                if (item.TypeName.Equals("DataSource"))
                 {
-                    /*
                     String name = item.Path;
                     if (name.StartsWith("/"))
                         name = name.Substring(1);
-                    ReportItem i = new ReportItem(this, name, Project, rs);
+                    if (Project.Settings.ReportRoot.Length > 0)
+                    {
+                        if (!name.ToLower().StartsWith(Project.Settings.ReportRoot.ToLower()))
+                            throw new Exception("Объект " + name + " должен начинаться с " + Project.Settings.ReportRoot);
+                        name = name.Substring(Project.Settings.ReportRoot.Length);
+                    }
+                    if (name.StartsWith("/"))
+                        name = name.Substring(1);
+                    ReportDataSourceItem i = new ReportDataSourceItem(this, name, Project, rs);
                     i.RemoteModifyDate = item.ModifiedDate;
-                    Items.Add(i);*/
+                    Items.Add(i);
                 }
             }
         }
 
         public override void AddItem(string name)
-        {/*
-            Items.Add(new ReportDataSourceItem(this, name, Project, rs));*/
+        {
+            Items.Add(new ReportDataSourceItem(this, name, Project, rs));
         }
 
         public override String Prefix { get { return "ReportDS"; } }

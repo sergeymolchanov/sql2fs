@@ -17,20 +17,22 @@ namespace sql2fsbase.Adapters.Impl
 
         public ReportingService2010 Service { get; private set; }
 
+        private String FullName { get { return "/" + Project.Settings.ReportRoot + "/" + Name; } }
+
         public override void Push(byte[] data)
         {
             if (data == null)
             {
-                Service.DeleteItem("/" + Name);
+                Service.DeleteItem(FullName);
             }
             if (this.IsExistsRemote)
-                Service.SetItemDefinition("/" + Name, data, new Property[] { });
+                Service.SetItemDefinition(FullName, data, new Property[] { });
             else
             {
                 Warning[] warn = new Warning[] { };
                 Property[] prop = new Property[] { };
 
-                String[] spl = Name.Split('/');
+                String[] spl = FullName.Split('/');
                 String name = spl[spl.Length-1];
                 String path = "";
                 for(int i=0; i<spl.Length-1;i++)
@@ -45,7 +47,7 @@ namespace sql2fsbase.Adapters.Impl
             if (!this.IsExistsRemote)
                 return null;
 
-            return Service.GetItemDefinition("/" + Name);
+            return Service.GetItemDefinition(FullName);
         }
     }
 }
