@@ -9,17 +9,17 @@ namespace sql2fsbase
 {
     public class ProjectDirectory : IComparable<ProjectDirectory>
     {
-        private const String VORLAGEN_DIR = "Vorlagen";
-        private const String VALID_COMMIT_FILE = ".validcommit";
-        private const String REPO_LOCK_FILE = ".repolock";
-
+        private const String LOCK_FILE = "lock.md5";
+        
         public DirectoryInfo Dir { get; private set; }
         public String Name { get { return Dir.Name; } }
         public ProjectSettings Settings { get; private set; }
+        public ITools Tools { get; private set; }
 
-        public ProjectDirectory(DirectoryInfo dir)
+        public ProjectDirectory(DirectoryInfo dir, ITools tools)
         {
             Dir = dir;
+            Tools = tools;
             Settings = ProjectSettings.Load(dir);
         }
 
@@ -27,19 +27,26 @@ namespace sql2fsbase
         {
             Common.Out("Merge '{0}'", Name);
 
-            AdapterManager manager = new AdapterManager(this);
-            manager.Merge();
-        }
+            FileInfo lockFile = new FileInfo(Dir.FullName + "\\" + LOCK_FILE);
+            FileStream lockFs = null;
 
-        public bool IsRepoLocked
-        {
-            get { return this.LoadFile("", REPO_LOCK_FILE) != null; }
-            private set
+            try
             {
-                if (value)
-                    this.StoreFile("", REPO_LOCK_FILE, new byte[1] { 0 });
-                else
-                    this.DeleteFile("", REPO_LOCK_FILE);
+                lockFs = lockFile.OpenWrite();
+            } 
+            catch(IOException ex)
+            {
+                throw new Exception("Синхронизация уже выполняется в другой программе");
+            }
+
+            try
+            {
+                AdapterManager manager = new AdapterManager(this);
+                manager.Merge();
+            }
+            finally
+            {
+                lockFs.Close();
             }
         }
 

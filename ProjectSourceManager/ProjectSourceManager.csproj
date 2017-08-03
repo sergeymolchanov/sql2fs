@@ -53,7 +53,13 @@
     <Compile Include="AdapterView\SQLErrorView.Designer.cs">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
     </Compile>
-    <Compile Include="DiffTool.cs" />
+    <Compile Include="AskMergeStyleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AskMergeStyleForm.Designer.cs">
+      <DependentUpon>AskMergeStyleForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools.cs" />
     <Compile Include="ProjectEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +76,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AdapterView\SQLErrorView.resx">
       <DependentUpon>SQLErrorView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AskMergeStyleForm.resx">
+      <DependentUpon>AskMergeStyleForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectEditor.resx">
       <DependentUpon>ProjectEditor.cs</DependentUpon>

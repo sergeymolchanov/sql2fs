@@ -70,7 +70,7 @@ namespace ProjectSourceManager
                     return;
                 }
                 dir.Create();
-                Project = new ProjectDirectory(dir);
+                Project = new ProjectDirectory(dir, new Tools());
             }
 
             Project.Settings.ConnectionString = tbConnectionString.Text;

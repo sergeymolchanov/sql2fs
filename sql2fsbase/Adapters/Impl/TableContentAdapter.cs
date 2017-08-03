@@ -12,8 +12,8 @@ namespace sql2fsbase.Adapters.Impl
     {
         private TableContent.TableConfig[] Config = new TableContent.TableConfig[0];
 
-        public TableContentAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
-            : base(project, sqlErrorView)
+        public TableContentAdapter(ProjectDirectory project)
+            : base(project)
         {
             byte[] fileData = Project.LoadFile(Prefix, "tables.xml");
 

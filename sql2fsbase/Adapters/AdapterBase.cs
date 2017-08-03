@@ -130,7 +130,7 @@ namespace sql2fsbase.Adapters
                 Directory.CreateDirectory(path);
         }
 
-        public void Merge()
+        public void Merge(Common.MergeStyle mergeStyle)
         {
             OnBeforeSync();
 
@@ -147,7 +147,7 @@ namespace sql2fsbase.Adapters
                 LongOperationState.Timer1Pos++;
                 LongOperationState.Timer1Text = item.Name;
 
-                item.Merge();
+                item.Merge(mergeStyle);
             }
 
             OnAfterSync();

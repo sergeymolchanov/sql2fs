@@ -1,4 +1,6 @@
-﻿using sql2fsbase;
+﻿using ProjectSourceManager.Adapters.Impl.DBContent;
+using sql2fsbase;
+using sql2fsbase.Adapters.Impl;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace ProjectSourceManager
 {
-    public class DiffTool : IDiffTool
+    public class Tools : ITools
     {
+        private SQLErrorView fSQLErrorView = new SQLErrorView();
+
         public byte[] MergeFiles(byte[] dbData, byte[] vkData, byte[] baseData)
         {
             String tempPath = Environment.GetEnvironmentVariable("TEMP");
@@ -43,6 +47,16 @@ namespace ProjectSourceManager
             p.WaitForExit();
 
             return Common.LoadFile(resultFile);
+        }
+
+        public bool ShowSQL(List<AdapterBaseSQL.AdapterSqlException> queryList)
+        {
+            return fSQLErrorView.ShowSQL(queryList);
+        }
+
+        public Common.MergeStyle AskHowToMerge()
+        {
+            return AskMergeStyleForm.Ask();
         }
     }
 }

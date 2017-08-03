@@ -9,11 +9,6 @@ namespace sql2fsbase.Adapters.Impl
 {
     public class TableContent
     {
-        public interface ISqlErrorView
-        {
-            bool ShowSQL(List<AdapterBaseSQL.AdapterSqlException> queryList);
-        }
-
         [XmlRoot("Object")]
         public class TableData
         {

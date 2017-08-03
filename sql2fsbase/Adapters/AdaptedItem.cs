@@ -33,7 +33,7 @@ namespace sql2fsbase.Adapters
             return new List<string>();
         }
 
-        public void Merge()
+        public void Merge(Common.MergeStyle mergeStyle)
         {
             bool baseExists = Project.ExistsFile(Adapter.Prefix, Name + Adapter.Postfix + ".base");
 
@@ -52,9 +52,32 @@ namespace sql2fsbase.Adapters
 
             byte[] masterHash = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix + ".md5");
 
-            bool changedLocal = !ByteArrayEqual(localHash, masterHash);
-            bool changedRemote = !ByteArrayEqual(remoteHash, masterHash);
-            bool changedHash = (changedLocal || changedRemote) && ByteArrayEqual(localHash, remoteHash);
+            bool changedLocal = !Common.ByteArrayEqual(localHash, masterHash);
+            bool changedRemote = !Common.ByteArrayEqual(remoteHash, masterHash);
+            bool changedHash = (changedLocal || changedRemote) && Common.ByteArrayEqual(localHash, remoteHash);
+
+            if (mergeStyle == Common.MergeStyle.Normal)
+            {
+                changedLocal = !Common.ByteArrayEqual(localHash, masterHash);
+                changedRemote = !Common.ByteArrayEqual(remoteHash, masterHash);
+                changedHash = (changedLocal || changedRemote) && Common.ByteArrayEqual(localHash, remoteHash);
+            }
+            else if (mergeStyle == Common.MergeStyle.Db2Repo)
+            {
+                changedLocal = false;
+                changedRemote = true;
+                changedHash = false;
+            }
+            else if (mergeStyle == Common.MergeStyle.Repo2Db)
+            {
+                changedLocal = true;
+                changedRemote = false;
+                changedHash = false;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
 
             if (changedHash)
             {
@@ -68,11 +91,8 @@ namespace sql2fsbase.Adapters
             {
                 byte[] mergeData = null;
 
-                if (AdapterManager.DiffTool != null)
-                {
-                    byte[] baseData = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix + ".base");
-                    mergeData = AdapterManager.DiffTool.MergeFiles(remoteData, localData, baseData);
-                }
+                byte[] baseData = Project.LoadFile(Adapter.Prefix, Name + Adapter.Postfix + ".base");
+                mergeData = Project.Tools.MergeFiles(remoteData, localData, baseData);
 
                 if (mergeData == null)
                     throw new ObjectChangedException(this);
@@ -119,23 +139,6 @@ namespace sql2fsbase.Adapters
                     Project.StoreFile(Adapter.Prefix, Name + Adapter.Postfix + ".base", remoteData);
                 }
             }
-        }
-
-        private bool ByteArrayEqual(byte[] b1, byte[] b2)
-        {
-            if (b1 == null && b2 == null)
-                return true;
-
-            if (b1 == null || b2 == null || b1.Length != b2.Length)
-                return false;
-
-            for (int i = 0; i < b1.Length; i++)
-            {
-                if (b1[i] != b2[i])
-                    return false;
-            }
-
-            return true;
         }
 
         public DateTime? RemoteModifyDate { get; set; }

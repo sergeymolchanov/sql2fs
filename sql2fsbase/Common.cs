@@ -198,5 +198,29 @@ namespace sql2fsbase
                 File.WriteAllBytes(name, data);
             }
         }
+
+        public static bool ByteArrayEqual(byte[] b1, byte[] b2)
+        {
+            if (b1 == null && b2 == null)
+                return true;
+
+            if (b1 == null || b2 == null || b1.Length != b2.Length)
+                return false;
+
+            for (int i = 0; i < b1.Length; i++)
+            {
+                if (b1[i] != b2[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public enum MergeStyle
+        {
+            Normal,
+            Repo2Db,
+            Db2Repo
+        }
     }
 }

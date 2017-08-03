@@ -8,8 +8,8 @@ namespace sql2fsbase.Adapters.Impl
     {
         private const String QueryString = @"select RowKey, OriginalTime, CommandText from DDL_Log where IsOriginal = 1";
 
-        public DDLAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
-            : base(project, sqlErrorView)
+        public DDLAdapter(ProjectDirectory project)
+            : base(project)
         {
             String _initSqlFile = Common.RootDir.FullName + "\\Hooks\\Database.sql";
             if (File.Exists(_initSqlFile))

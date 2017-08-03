@@ -12,7 +12,7 @@ using sql2fsbase.Adapters.Impl;
 
 namespace ProjectSourceManager.Adapters.Impl.DBContent
 {
-    public partial class SQLErrorView : Form, TableContent.ISqlErrorView
+    public partial class SQLErrorView : Form
     {
         public SQLErrorView()
         {

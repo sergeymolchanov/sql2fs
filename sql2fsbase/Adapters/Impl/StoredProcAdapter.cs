@@ -11,8 +11,8 @@ namespace sql2fsbase.Adapters.Impl
  where type in ('FN', 'IF', 'P', 'TF', 'TR', 'V')
  order by type, name";
 
-        public StoredProcAdapter(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
-            : base(project, sqlErrorView)
+        public StoredProcAdapter(ProjectDirectory project)
+            : base(project)
         {
         }
         

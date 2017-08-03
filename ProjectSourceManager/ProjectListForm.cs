@@ -21,7 +21,7 @@ namespace ProjectSourceManager
             _instance = this;
             InitializeComponent();
 
-            dir = new ProjectDirectory(Common.RootDir);
+            dir = new ProjectDirectory(Common.RootDir, new Tools());
             dir.CheckGitHooks();
         }
 

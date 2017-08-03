@@ -10,13 +10,10 @@ namespace sql2fsbase.Adapters.Impl
 {
     public abstract class AdapterBaseSQL : AdapterBase
     {
-        public AdapterBaseSQL(ProjectDirectory project, TableContent.ISqlErrorView sqlErrorView)
+        public AdapterBaseSQL(ProjectDirectory project)
             : base(project)
         {
-            SqlErrorViewInstance = sqlErrorView;
         }
-
-        private TableContent.ISqlErrorView SqlErrorViewInstance;
 
         private SqlConnection _connection = null;
         protected SqlConnection Connection
@@ -69,7 +66,7 @@ namespace sql2fsbase.Adapters.Impl
 
                 if (_errorSQL.Count == PrevErrorCount)
                 {
-                    bool doCancel = SqlErrorViewInstance.ShowSQL(_errorSQL);
+                    bool doCancel = Project.Tools.ShowSQL(_errorSQL);
 
                     if (doCancel)
                         throw new SyncErrorsException(_errorSQL);
