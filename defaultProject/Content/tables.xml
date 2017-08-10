@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<ContentConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Tables>
+    <Table>
+      <Name>_localstr</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond>prog</SplitCond>
+      <Filter />
+      <Fields>
+        <Field>msgid</Field>
+        <Field>lang</Field>
+        <Field>msg</Field>
+        <Field>prog</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>contracttypes</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>code</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>for_sale</Field>
+        <Field>for_purchase</Field>
+        <Field>can_be_top</Field>
+        <Field>is_multiterms</Field>
+        <Field>costdate_mode</Field>
+        <Field>prefix</Field>
+        <Field>is_default</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>currency</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>code</Field>
+        <Field>num</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>is_default</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>dcactions</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>turnoverptr</Field>
+        <Field>stockactionptr</Field>
+        <Field>code</Field>
+        <Field>docstatusptr</Field>
+        <Field>mode</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>delayreason</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>in_KPI</Field>
+        <Field>exclude_plan</Field>
+        <Field>demandtype</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>demandstatuses</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>linenum</Field>
+        <Field>is_new</Field>
+        <Field>forecast</Field>
+        <Field>firmed</Field>
+        <Field>started</Field>
+        <Field>completed</Field>
+        <Field>finished</Field>
+        <Field>closed</Field>
+        <Field>stopped</Field>
+        <Field>for_internals</Field>
+        <Field>for_job</Field>
+        <Field>for_demand</Field>
+        <Field>for_order</Field>
+        <Field>for_tag</Field>
+        <Field>for_oper</Field>
+        <Field>can_be_planned</Field>
+        <Field>date_fixed</Field>
+        <Field>internal</Field>
+        <Field>planning_parameter</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>depttype</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>code</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>is_logistic</Field>
+        <Field>is_finalassembly</Field>
+        <Field>is_assembly</Field>
+        <Field>is_partsproduction</Field>
+        <Field>is_outservice</Field>
+        <Field>is_outside</Field>
+        <Field>jobsteptype</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>docform</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>printable</Field>
+        <Field>ReportName</Field>
+        <Field>format</Field>
+        <Field>active</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>docstatus</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>linenum</Field>
+        <Field>is_maketrans</Field>
+        <Field>is_closed</Field>
+        <Field>is_new</Field>
+        <Field>is_complete</Field>
+        <Field>firmed</Field>
+        <Field>in_processing</Field>
+        <Field>stopped</Field>
+        <Field>is_canceled</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>IntegrationObjects</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>DumpSP</Field>
+        <Field>LoadSP</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>IntegrationPorts</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>softptr</Field>
+        <Field>objectptr</Field>
+        <Field>DumpActive</Field>
+        <Field>DumpXSLFile</Field>
+        <Field>DumpDir</Field>
+        <Field>LoadActive</Field>
+        <Field>LoadXSLFile</Field>
+        <Field>LoadDir</Field>
+        <Field>seq</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>IntegrationSofts</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>XPath</Field>
+        <Field>LastNum</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>internaltypes</Name>
+      <PrimaryKey>id</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>type</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>typename</Field>
+        <Field>use_phantom</Field>
+        <Field>allocate_calc_rule</Field>
+        <Field>released_rule</Field>
+        <Field>destribution_rule</Field>
+        <Field>auto_close</Field>
+        <Field>use_alternative</Field>
+        <Field>reallocation_rule</Field>
+        <Field>use_calendar</Field>
+        <Field>allocatable</Field>
+        <Field>allocable</Field>
+        <Field>depth</Field>
+        <Field>use_serials</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>itemgroup</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>code</Field>
+        <Field>parentigrptr</Field>
+        <Field>apply_for</Field>
+        <Field>is_default</Field>
+        <Field>passRequirements</Field>
+        <Field>allocable</Field>
+        <Field>demandforcepassreq</Field>
+        <Field>consolidate_period</Field>
+        <Field>consolidate_period_flag</Field>
+        <Field>Plan_horizon</Field>
+        <Field>plan_horizon_flag</Field>
+        <Field>simple_bom</Field>
+        <Field>promised_impact</Field>
+        <Field>sync_duration</Field>
+        <Field>sync_loadhours</Field>
+        <Field>apply_cagent</Field>
+        <Field>id_budgetline</Field>
+        <Field>tagtypeptr</Field>
+        <Field>is_complect</Field>
+        <Field>leadtime2_flag</Field>
+        <Field>job_supply_point</Field>
+        <Field>by_serial</Field>
+        <Field>copy_procedure</Field>
+        <Field>copy_mode</Field>
+        <Field>stock_cost_method</Field>
+        <Field>phantom</Field>
+        <Field>serials_mode_bom</Field>
+        <Field>kitptr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>kpi</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>linenum</Field>
+        <Field>code</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>parentptr</Field>
+        <Field>manual</Field>
+        <Field>target</Field>
+        <Field>weight</Field>
+        <Field>nofact</Field>
+        <Field>active</Field>
+        <Field>fixvalue</Field>
+        <Field>type</Field>
+        <Field>kgroup</Field>
+        <Field>CalcFunction</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>kpi2shopfloor</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>sptr</Field>
+        <Field>kptr</Field>
+        <Field>pptr</Field>
+        <Field>manual</Field>
+        <Field>target</Field>
+        <Field>weight</Field>
+        <Field>nofact</Field>
+        <Field>daysafter</Field>
+        <Field>datefrom</Field>
+        <Field>dateto</Field>
+        <Field>fixvalue</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>kpiparameters</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>kptr</Field>
+        <Field>linenum</Field>
+        <Field>code</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>active</Field>
+        <Field>value</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>kpiperiod</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>part</Field>
+        <Field>daysafter</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>kpirules</Name>
+      <PrimaryKey>rowpointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>kpi2sfptr</Field>
+        <Field>valuefrom</Field>
+        <Field>valueto</Field>
+        <Field>value</Field>
+        <Field>altvalue</Field>
+        <Field>descr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>objectproperty</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>objectname</Field>
+        <Field>code</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>format</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>paymentstatus</Name>
+      <PrimaryKey>id</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>linenum</Field>
+        <Field>is_new</Field>
+        <Field>accepted</Field>
+        <Field>payed</Field>
+        <Field>closed</Field>
+        <Field>stopped</Field>
+        <Field>rejected</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>planrunparams</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>internal</Field>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>active</Field>
+        <Field>free_reservation</Field>
+        <Field>free_allocation</Field>
+        <Field>free_demandallocation</Field>
+        <Field>allocate_stock</Field>
+        <Field>reserve_stock</Field>
+        <Field>use_route_stock</Field>
+        <Field>allocate_demand</Field>
+        <Field>demand_selection_rule</Field>
+        <Field>ratio</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>reason</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>for_receive</Field>
+        <Field>for_release</Field>
+        <Field>for_transfer</Field>
+        <Field>for_service</Field>
+        <Field>for_scrap</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>resourcetype</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>costmethodptr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>routetype</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>linenum</Field>
+        <Field>name</Field>
+        <Field>is_outside</Field>
+        <Field>descr</Field>
+        <Field>topayment</Field>
+        <Field>termsseq_line</Field>
+        <Field>termsseq_type</Field>
+        <Field>jobsteptype</Field>
+        <Field>prepayment</Field>
+        <Field>to_statptr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>scrapcodes</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>code</Field>
+        <Field>active</Field>
+        <Field>itemgroupptr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>stockaction</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>code</Field>
+        <Field>apply_for</Field>
+        <Field>direction</Field>
+        <Field>action_procedure</Field>
+        <Field>clean_procedure</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>tagtype</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>code</Field>
+        <Field>is_default</Field>
+        <Field>demand_order</Field>
+        <Field>supply_order</Field>
+        <Field>is_primdemand</Field>
+        <Field>is_job</Field>
+        <Field>codeauto</Field>
+        <Field>numbermode</Field>
+        <Field>docformptr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>tax</Name>
+      <PrimaryKey>id</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>tax_rate</Field>
+        <Field>is_vat</Field>
+        <Field>include_price</Field>
+        <Field>code</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>tax2group</Name>
+      <PrimaryKey>id</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>taxid</Field>
+        <Field>taxgroupid</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>taxgroup</Name>
+      <PrimaryKey>id</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>termscode</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>active</Field>
+      </Fields>
+      <FieldsInsertOnly>
+        <Field>id</Field>
+      </FieldsInsertOnly>
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>termsseq</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>id_termscode</Field>
+        <Field>termsptr</Field>
+        <Field>linenum</Field>
+        <Field>terms_pr</Field>
+        <Field>days_offset</Field>
+        <Field>period</Field>
+        <Field>type</Field>
+        <Field>routetypeptr</Field>
+        <Field>base_date_of</Field>
+      </Fields>
+      <FieldsInsertOnly>
+        <Field>id</Field>
+      </FieldsInsertOnly>
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>ttypeaction</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>linenum</Field>
+        <Field>ttypeptr</Field>
+        <Field>target</Field>
+        <Field>sactptr</Field>
+        <Field>actcode</Field>
+        <Field>statptr</Field>
+        <Field>in_stock</Field>
+        <Field>for_order</Field>
+        <Field>for_demand</Field>
+        <Field>for_job</Field>
+        <Field>for_wc</Field>
+        <Field>for_route</Field>
+        <Field>for_tag</Field>
+        <Field>for_reserv</Field>
+        <Field>for_itemstock</Field>
+        <Field>doc_trans_date</Field>
+        <Field>from_free</Field>
+        <Field>informing</Field>
+        <Field>active</Field>
+        <Field>WMSordertype</Field>
+        <Field>reserve_mode</Field>
+        <Field>for_kit</Field>
+        <Field>for_parentitem</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>ttypestat</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>ttypeptr</Field>
+        <Field>statptr</Field>
+        <Field>forsource</Field>
+        <Field>fordestination</Field>
+        <Field>checkfrp</Field>
+        <Field>checkfrprec</Field>
+        <Field>checkreason</Field>
+        <Field>checkwhseto</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>turnovertype</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>code</Field>
+        <Field>module</Field>
+        <Field>tagmode</Field>
+        <Field>typegroup</Field>
+        <Field>formptr</Field>
+        <Field>browseprog</Field>
+        <Field>prog</Field>
+        <Field>docitemprog</Field>
+        <Field>turnpage</Field>
+        <Field>detailpage</Field>
+        <Field>orderitemprog</Field>
+        <Field>numbermode</Field>
+        <Field>oversupply</Field>
+        <Field>needjobto</Field>
+        <Field>needjobfrom</Field>
+        <Field>will_be_printed</Field>
+        <Field>must_be_printed</Field>
+        <Field>NeedCopyDocItems</Field>
+        <Field>CopyDocItemsProg</Field>
+        <Field>UDACustomCheck</Field>
+        <Field>isbase</Field>
+        <Field>obsolete</Field>
+        <Field>export</Field>
+        <Field>dumpportptr</Field>
+        <Field>active</Field>
+        <Field>whse_in_item</Field>
+        <Field>whserec_in_item</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+    <Table>
+      <Name>unitmeasure</Name>
+      <PrimaryKey>RowPointer</PrimaryKey>
+      <SplitCond />
+      <Filter />
+      <Fields>
+        <Field>name</Field>
+        <Field>descr</Field>
+        <Field>precision</Field>
+        <Field>okei</Field>
+      </Fields>
+      <FieldsInsertOnly />
+      <SubTables />
+    </Table>
+  </Tables>
+</ContentConfig>

@@ -165,7 +165,7 @@ namespace sql2fsbase.Adapters.Impl
             [XmlArrayItem(ElementName = "Field")]
             public String[] Fields { get; set; }
 
-            [XmlArrayItem(ElementName = "FieldsInsertOnly")]
+            [XmlArrayItem(ElementName = "Field")]
             public String[] FieldsInsertOnly { get; set; }
 
             [XmlArrayItem(ElementName = "SubTable")]
