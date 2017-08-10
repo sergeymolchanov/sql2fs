@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#my_dir=`dirname $0`
+
+#exec $my_dir/../../PsmProc.exe check
+
+#exit $?
+
+exit 0

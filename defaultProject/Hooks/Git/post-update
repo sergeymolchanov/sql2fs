@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#my_dir=`dirname $0`
+
+#exec $my_dir/../../PsmProc.exe merge
+
+#exit $?
+
+exit 0
