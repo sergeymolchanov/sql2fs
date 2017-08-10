@@ -103,7 +103,7 @@ namespace sql2fsbase.Adapters
                 }
                 else
                 {
-                    AddItem(path == ""? iname : path + "/" + iname);
+                    AddItem(path == ""? iname : path + "/" + iname, true);
                 }
             }
 
@@ -121,7 +121,7 @@ namespace sql2fsbase.Adapters
             LoadFromLocal(DataPath, "");
         }
 
-        public abstract void AddItem(String name);
+        public abstract void AddItem(String name, bool isLocal);
 
         private void checkTargetDir()
         {

@@ -42,11 +42,11 @@ namespace sql2fsbase.Adapters.Impl
             }
         }
 
-        public override void AddItem(string name)
+        public override void AddItem(string name, bool isLocal)
         {
-            Items.Add(new ReportDataSourceItem(this, name, Project, rs));
+            Items.Add(new ReportDataSourceItem(this, name, Project, rs) { IsExistsLocal = isLocal, IsExistsRemote = !isLocal });
         }
-
+        
         public override String Prefix { get { return "ReportDS"; } }
         public override String Postfix { get { return ".rds"; } }
     }

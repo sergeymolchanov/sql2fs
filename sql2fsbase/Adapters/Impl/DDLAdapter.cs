@@ -22,10 +22,10 @@ namespace sql2fsbase.Adapters.Impl
                 }
             }
         }
-        
-        public override void AddItem(string name)
+
+        public override void AddItem(string name, bool isLocal)
         {
-            Items.Add(new DDLItem(this, name, Project, Connection));
+            Items.Add(new DDLItem(this, name, Project, Connection) { IsExistsLocal = isLocal, IsExistsRemote = !isLocal} );
         }
 
         public override void LoadFromRemote()
@@ -35,7 +35,7 @@ namespace sql2fsbase.Adapters.Impl
             {
                 while (dr.Read())
                 {
-                    AddItem(dr.GetString(0));
+                    AddItem(dr.GetString(0), false);
                 }
             }
         }

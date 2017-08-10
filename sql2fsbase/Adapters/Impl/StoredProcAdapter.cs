@@ -15,11 +15,11 @@ namespace sql2fsbase.Adapters.Impl
             : base(project)
         {
         }
-        
-        public override void AddItem(string name)
+
+        public override void AddItem(string name, bool isLocal)
         {
             if (!IsExcluded(name))
-                Items.Add(new StoredProcItem(this, name, Project, Connection));
+                Items.Add(new StoredProcItem(this, name, Project, Connection) { IsExistsLocal = isLocal, IsExistsRemote = !isLocal });
         }
 
         public override void LoadFromRemote()

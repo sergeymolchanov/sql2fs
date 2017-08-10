@@ -110,7 +110,7 @@ namespace sql2fsbase.Adapters.Impl
                     String primaryKey = data.PrimaryKey;
 
                     String q = String.Format(@"delete from {0} where {1} = {2}", tableName, primaryKey,
-                        row.Data[primaryKey]);
+                        formatSqlField(row.Data[primaryKey]));
 
                     sql.Add(q);
                 }
@@ -294,6 +294,9 @@ namespace sql2fsbase.Adapters.Impl
 
         private TableContent.TableData DeserializeTable(String data)
         {
+            if (data == null)
+                return new TableContent.TableData() { Rows = new TableContent.TableRow[0] };
+
             using (TextReader reader = new StringReader(data))
             {
                 return Common.Deserialize<TableContent.TableData>(reader.ReadToEnd());

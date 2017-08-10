@@ -86,7 +86,7 @@ namespace sql2fsbase.Adapters.Impl
             Project.StoreFile(Prefix, "tables.xml", Encoding.GetEncoding(1251).GetBytes(serializedConfig));
         }
 
-        public override void AddItem(string name)
+        public override void AddItem(string name, bool isLocal)
         {
             TableContent.TableConfig config = null;
 
@@ -106,7 +106,7 @@ namespace sql2fsbase.Adapters.Impl
             if (config == null)
                 return;
 
-            Items.Add(new TableContentItem(this, name, Project, Connection, config, splitCond, tableName));
+            Items.Add(new TableContentItem(this, name, Project, Connection, config, splitCond, tableName) { IsExistsLocal = isLocal, IsExistsRemote = !isLocal });
         }
 
         public override String Postfix { get { return ".xml"; } }
@@ -118,7 +118,7 @@ namespace sql2fsbase.Adapters.Impl
             {
                 if (config.SplitCond == null || config.SplitCond.Length == 0)
                 {
-                    AddItem(config.Name);
+                    AddItem(config.Name, false);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace sql2fsbase.Adapters.Impl
                         {
                             String filterCond = dr.GetValue(0).ToString();
 
-                            AddItem(config.Name + "-" + filterCond);
+                            AddItem(config.Name + "-" + filterCond, false);
                         }
                     }
                 }
