@@ -32,9 +32,16 @@ namespace sql2fsbase.Adapters.Impl
             TableContent.TableData fileData = DeserializeTable(Common.ConvertFrom(data, _enc));
             TableContent.TableData DBData = PullTable();
 
+            bool isExistsInsertOnly = (config.FieldsInsertOnly != null && config.FieldsInsertOnly.Length > 0);
+
             List<String> sql = new List<string>();
 
             GenerateMergeScript(sql, DBData, fileData);
+
+            if (isExistsInsertOnly)
+            {
+                new SqlCommand(String.Format("SET IDENTITY_INSERT {0} ON", config.Name), connection).ExecuteNonQuery();
+            }
 
             foreach (var q in sql)
             {
@@ -46,6 +53,11 @@ namespace sql2fsbase.Adapters.Impl
                 {
                     ((AdapterBaseSQL)this.Adapter).AddError(q, e);
                 }
+            }
+
+            if (isExistsInsertOnly)
+            {
+                new SqlCommand(String.Format("SET IDENTITY_INSERT {0} OFF", config.Name), connection).ExecuteNonQuery();
             }
         }
 
