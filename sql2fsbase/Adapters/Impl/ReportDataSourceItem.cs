@@ -17,7 +17,7 @@ namespace sql2fsbase.Adapters.Impl
 
         public ReportingService2010 Service { get; private set; }
 
-        private String FullName { get { return "/" + Project.Settings.ReportRoot + "/" + Name; } }
+        private String FullName { get { return (Project.Settings.ReportRoot.Length > 0 ? "/" + Project.Settings.ReportRoot : "") + "/" + Name; } }
 
         public override void Push(byte[] data)
         {
