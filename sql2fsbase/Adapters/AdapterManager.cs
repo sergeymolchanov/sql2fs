@@ -22,9 +22,9 @@ namespace sql2fsbase.Adapters
 
             if (Project.Settings.ConnectionString != null && Project.Settings.ConnectionString.Length > 5)
             {
-                Adapters.Add(new TableContentAdapter(project));
                 Adapters.Add(new DDLAdapter(project));
                 Adapters.Add(new StoredProcAdapter(project));
+                Adapters.Add(new TableContentAdapter(project));
             }
 
             if (Project.Settings.ReportServerURL != null && Project.Settings.ReportServerURL.Length > 5)
